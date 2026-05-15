@@ -1,31 +1,20 @@
+from empathy_engine.safety.policy import SAFETY_GUIDANCE, evaluate_safety
+from empathy_engine.schemas import SafetyResult, to_plain_data
+
+
 class BiasSafetyAgent:
 
-    def run(self, content: dict) -> dict:
-        unsafe_terms = {
-            "diagnosis": "Avoid diagnostic framing.",
-            "diagnose": "Avoid diagnostic framing.",
-            "disorder": "Avoid clinical labeling.",
-            "normal": "Avoid normalization language.",
-            "abnormal": "Avoid normalization language.",
-            "right": "Avoid deciding who is right.",
-            "wrong": "Avoid deciding who is wrong.",
-            "fault": "Avoid assigning fault.",
-            "blame": "Avoid assigning blame.",
-            "manipulative": "Avoid pathologizing intent.",
-            "lazy": "Avoid character judgments.",
-            "crazy": "Avoid stigmatizing language.",
-            "overreacting": "Avoid dismissive language.",
-        }
-        text = str(content).lower()
-        removed_terms = [term for term in unsafe_terms if term in text]
-        safety_notes = sorted({unsafe_terms[term] for term in removed_terms})
+    def run(self, content) -> SafetyResult:
+        text = str(to_plain_data(content)).lower()
+        findings = evaluate_safety(text)
+        removed_terms = sorted(
+            {term for finding in findings for term in finding["terms"]}
+        )
+        safety_notes = sorted({finding["note"] for finding in findings})
 
-        return {
-            "safe": not removed_terms,
-            "removed_terms": removed_terms,
-            "safety_notes": safety_notes,
-            "guidance": (
-                "Frame outputs as possible interpretations, not diagnosis, "
-                "fault, or behavioral normalization."
-            )
-        }
+        return SafetyResult(
+            safe=not removed_terms,
+            removed_terms=removed_terms,
+            safety_notes=safety_notes,
+            guidance=SAFETY_GUIDANCE,
+        )

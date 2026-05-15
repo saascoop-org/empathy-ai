@@ -1,0 +1,25 @@
+[project]
+name = "empathy-interactional-expertise"
+version = "0.1.0"
+description = "Local-first multi-agent communication mediation demo."
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit",
+    "ollama",
+    "langgraph",
+    "langchain",
+    "chromadb",
+    "sqlalchemy",
+    "pydantic",
+    "python-dotenv",
+    "faster-whisper",
+    "sentence-transformers",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

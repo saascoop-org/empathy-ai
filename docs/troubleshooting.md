@@ -68,3 +68,5 @@ Remove-Item data/interactions.sqlite3
 ```
 
 Only anonymized consented records should be present in this database.
+
+You can also delete local records from the app sidebar under `Local data`.

@@ -1,7 +1,21 @@
 import streamlit as st
+from pydantic import ValidationError
 
-from empathy_engine.orchestration.workflow import EmpathyWorkflow
+from empathy_engine.errors import EmpathyEngineError
+from empathy_engine.config import load_settings
+from empathy_engine.i18n.language import (
+    LANGUAGE_LABELS,
+    SUPPORTED_UI_LANGUAGES,
+    get_default_ui_language,
+    translate,
+)
+from empathy_engine.operations import get_local_runtime_status
+from empathy_engine.safety.logging import configure_safe_logging
 from empathy_engine.storage.interaction_store import InteractionStore
+from empathy_engine.use_cases.analyze_interaction import (
+    AnalyzeInteractionCommand,
+    AnalyzeInteractionUseCase,
+)
 
 st.set_page_config(
     page_title="Empathy-Interactional-Expertise",
@@ -9,85 +23,132 @@ st.set_page_config(
 )
 
 st.title("Empathy-Interactional-Expertise")
-st.subheader("AI-powered communication mediation with local privacy controls")
+configure_safe_logging()
 
-st.markdown(
-    '''
-    Describe a communication mismatch. The system will anonymize the text,
-    run the multi-agent empathy workflow, and show a possible bridge.
-    '''
+try:
+    settings = load_settings()
+    default_language = get_default_ui_language()
+except (ValueError, ValidationError) as error:
+    st.error(f"Invalid application configuration: {error}")
+    st.stop()
+
+selected_language = st.sidebar.selectbox(
+    translate(default_language, "ui_language"),
+    SUPPORTED_UI_LANGUAGES,
+    index=SUPPORTED_UI_LANGUAGES.index(default_language),
+    format_func=lambda language: LANGUAGE_LABELS[language],
 )
 
-st.info(
-    "This tool offers communication support only. It does not provide "
-    "clinical, legal, HR, or specialized educational advice."
-)
+t = lambda key: translate(selected_language, key)
+store = InteractionStore()
+
+with st.sidebar.expander("Local status", expanded=False):
+    status = get_local_runtime_status(settings)
+    st.text(f"Model: {status.model}")
+    st.text(f"Ollama: {'available' if status.ollama_available else 'unavailable'}")
+    st.text(f"Processing language: {status.processing_language}")
+    st.text(f"Database: {status.database_path}")
+
+with st.sidebar.expander("Local data", expanded=False):
+    records = store.list(limit=5)
+    st.caption(f"Stored records: {len(records)} shown")
+
+    if records:
+        for record in records:
+            st.text(f"#{record.id} - {record.created_at}")
+            st.caption(record.feedback or "no feedback")
+
+        delete_id = st.number_input(
+            "Delete record id",
+            min_value=1,
+            step=1,
+            value=records[0].id,
+        )
+        if st.button("Delete selected local record"):
+            deleted = store.delete(int(delete_id))
+            st.info(f"Deleted records: {deleted}")
+
+        if st.button("Delete all local records"):
+            deleted = store.delete_all()
+            st.info(f"Deleted records: {deleted}")
+    else:
+        st.caption("No local records.")
+
+st.subheader(t("subtitle"))
+
+st.markdown(t("intro"))
+
+st.info(t("notice"))
 
 interaction = st.text_area(
-    "Interaction to analyze",
+    t("interaction_label"),
     height=200,
-    placeholder=(
-        "Example: My coworker thought my short message was rude, but I was "
-        "trying to be clear because the meeting was running late."
-    ),
-    help=(
-        "Avoid using real personal data during demos. If you include names, "
-        "emails, phone numbers, or addresses, the workflow will try to mask them."
-    )
+    placeholder=t("interaction_placeholder"),
+    help=t("interaction_help")
 )
 
 store_consent = st.checkbox(
-    "I consent to local storage of anonymized interactions",
+    t("consent"),
     value=False,
-    help="When unchecked, no interaction is written to the local SQLite database."
+    help=t("consent_help")
 )
 
 feedback = st.radio(
-    "Response feedback",
-    ["Useful and safe", "Partially useful", "Not useful"],
+    t("feedback"),
+    t("feedback_options"),
     horizontal=True,
     index=None,
-    help="Optional feedback is stored only if local storage consent is selected."
+    help=t("feedback_help")
 )
 
-if st.button("Analyze Interaction", type="primary", use_container_width=True):
+if st.button(t("analyze"), type="primary", use_container_width=True):
     if not interaction.strip():
-        st.warning("Please describe an interaction before analyzing.")
+        st.warning(t("missing_interaction"))
     else:
-        with st.spinner("Running multi-agent empathy analysis..."):
-            workflow = EmpathyWorkflow(use_llm=True)
-            result = workflow.run(interaction)
+        with st.spinner(t("spinner")):
+            try:
+                use_case = AnalyzeInteractionUseCase()
+                analysis = use_case.execute(
+                    AnalyzeInteractionCommand(
+                        interaction=interaction,
+                        output_language=selected_language,
+                        store_consent=store_consent,
+                        feedback=feedback,
+                    )
+                )
+            except EmpathyEngineError as error:
+                st.error(str(error))
+                st.stop()
+            result = analysis.workflow_result
+            display_result = analysis.display_result
 
-        st.success("Possible empathy bridge identified.")
+        st.success(t("success"))
 
-        if not result["safety"]["safe"]:
-            st.warning(result["safety"]["guidance"])
+        if not display_result["safety"]["safe"]:
+            st.warning(display_result["safety"]["guidance"])
 
-        st.markdown("### Context")
-        st.write(
-            "The workflow found a possible mismatch in tone expectations and "
-            "communication cues."
+        st.markdown(t("context_heading"))
+        st.write(t("context_text"))
+        st.caption(
+            t("language_note").format(
+                user_language=LANGUAGE_LABELS[result["language"]["user_language"]]
+            )
         )
 
-        st.markdown("### Perspective Translation")
-        st.write("For the user:")
-        st.write(result["translation"]["translation_for_user"])
-        st.write("For the other person:")
-        st.write(result["translation"]["translation_for_other_person"])
+        st.markdown(t("translation_heading"))
+        st.write(t("for_user"))
+        st.write(display_result["translation"]["translation_for_user"])
+        st.write(t("for_other"))
+        st.write(display_result["translation"]["translation_for_other_person"])
 
-        st.markdown("### Suggested Bridge")
-        st.write(result["response"]["bridge_message"])
+        st.markdown(t("bridge_heading"))
+        st.write(display_result["response"]["bridge_message"])
 
-        st.markdown("### Learning Insight")
-        st.write(result["learning"]["reflection_question"])
+        st.markdown(t("learning_heading"))
+        st.write(display_result["learning"]["reflection_question"])
 
-        st.markdown("### Privacy")
+        st.markdown(t("privacy_heading"))
         if store_consent:
-            record_id = InteractionStore().save(
-                result["interaction"],
-                result,
-                feedback
-            )
-            st.info(f"Anonymized interaction stored locally as record {record_id}.")
+            st.info(t("stored").format(record_id=analysis.stored_record_id))
         else:
-            st.info("No interaction was stored.")
+            st.info(t("not_stored"))

@@ -4,6 +4,15 @@ import re
 class Anonymizer:
 
     def anonymize(self, text: str):
+        return self.anonymize_for_processing(text)
+
+    def anonymize_for_processing(self, text: str):
+        return self._anonymize(text)
+
+    def anonymize_for_persistence(self, text: str):
+        return self._anonymize(text)
+
+    def _anonymize(self, text: str):
 
         text = re.sub(r"\b[\w\.-]+@[\w\.-]+\.\w+\b", "[EMAIL]", text)
         text = re.sub(r"https?://\S+|www\.\S+", "[URL]", text)
@@ -13,6 +22,10 @@ class Anonymizer:
         text = re.sub(r"\b(?:Rua|Avenida|Av\.|Alameda|Travessa)\s+[^,.]+", "[ADDRESS]", text)
         text = re.sub(r"\b(?:Slack|Teams|Discord|Telegram|WhatsApp):\s*\S+", "[HANDLE]", text)
         text = re.sub(r"\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b", "[PERSON]", text)
-        text = re.sub(r"\b[A-Z][a-z]+\b", "[PERSON]", text)
+        text = re.sub(
+            r"\b(?!My\b|The\b|This\b|That\b|A\b|An\b|I\b)([A-Z][a-z]+)\b",
+            "[PERSON]",
+            text,
+        )
 
         return text

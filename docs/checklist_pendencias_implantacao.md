@@ -98,3 +98,10 @@ Observacao P0: o modelo `gemma4:e2b` esta instalado, mas a chamada real falhou p
 - [x] Resposta final passa pela camada de seguranca.
 - [x] Nenhum texto bruto e persistido sem consentimento.
 - [x] README contem instrucoes suficientes para reproduzir a execucao.
+
+## Multilingue
+
+- [x] Interface disponivel em PT-BR, EN e ES.
+- [x] Idioma padrao de processamento configurado como EN.
+- [x] Deteccao heuristica do idioma do usuario com fallback para EN.
+- [x] Saida apresentada no idioma selecionado pelo usuario.

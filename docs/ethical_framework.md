@@ -1,5 +1,8 @@
 # Ethical Framework
 
+Canonical safety behavior spec: `../specs/features/safety-boundaries.md`.
+Active policy: `../specs/safety-policy-v1.md`.
+
 ## Principles
 
 - Human-centered AI
