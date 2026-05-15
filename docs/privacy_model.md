@@ -1,5 +1,7 @@
 # Privacy Model
 
+Canonical privacy and consent behavior spec: `../specs/features/privacy-consent-storage.md`.
+
 ## Local-first execution
 
 The system prioritizes:
@@ -21,6 +23,7 @@ The system prioritizes:
 - The default SQLite database path is `data/interactions.sqlite3`.
 - The `data/` directory is ignored by Git.
 - Local demo retention is manual: delete `data/interactions.sqlite3` to remove stored interactions.
+- The interface also exposes controls to delete one local record or all local records.
 
 ## Current anonymization coverage
 
@@ -35,6 +38,8 @@ The anonymizer masks common sensitive fields before persistence:
 - capitalized names and composed names
 
 This is a defensive baseline for a demo, not a full privacy guarantee for production use.
+
+See `privacy_limits.md` for known anonymization limits, processing/persistence separation, safe logging, and retention policy.
 
 ## ChromaDB status
 

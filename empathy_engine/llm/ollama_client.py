@@ -1,16 +1,14 @@
-import os
+from empathy_engine.config import AppSettings, load_settings
 
 
 class OllamaClient:
 
-    def __init__(self, model=None):
+    def __init__(self, model=None, settings: AppSettings | None = None):
         import ollama
-        from dotenv import load_dotenv
 
-        load_dotenv()
-        self.model = model or os.getenv("GEMMA_MODEL", "gemma3:1b")
-        base_url = os.getenv("OLLAMA_BASE_URL")
-        self.client = ollama.Client(host=base_url) if base_url else ollama.Client()
+        self.settings = settings or load_settings()
+        self.model = model or self.settings.gemma_model
+        self.client = ollama.Client(host=self.settings.ollama_base_url)
 
     def generate(self, prompt: str):
 
