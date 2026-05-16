@@ -9,8 +9,24 @@ Branch local de registro: `ux-demo-readiness-streamlit`
 Commits locais:
 
 - `4fd7bdc` - `Prepare Streamlit UX demo readiness`
+- `a58b9f1` - `Add public demo issue draft`
 
 Observacao: a branch foi criada localmente. O `gh` local esta com token invalido e o conector GitHub retornou 403 ao criar issue, entao o push da branch e a abertura da issue ainda precisam de autenticacao GitHub valida.
+
+## Como criar a issue no GitHub
+
+Depois de reautenticar o GitHub CLI:
+
+```powershell
+gh auth login -h github.com
+gh issue create --repo HackathonBrTeam/Empathy-Interactional-Expertise --title "Preparar demo publica controlada com UX Streamlit e Gemma4" --body-file docs/issue_demo_publica_controlada.md
+```
+
+Opcionalmente, publique a branch antes:
+
+```powershell
+git push -u origin ux-demo-readiness-streamlit
+```
 
 ## Implementacoes registradas
 
@@ -63,4 +79,3 @@ Publicar apenas como demo controlada, nao como demo aberta:
 - Gemma4 pode apresentar latencia alta e fila se houver concorrencia.
 - A anonimizacao atual e baseline de demo, nao garantia produtiva.
 - Audio exige HTTPS e ainda nao possui transcricao automatica nesta versao.
-
