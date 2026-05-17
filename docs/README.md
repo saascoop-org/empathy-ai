@@ -18,4 +18,5 @@ For the intended behavior and architecture, start in `../specs/`.
 - `issue_ux_demo_readiness_streamlit.md`: issue draft for UX implementations already completed in the demo branch.
 - `issue_demo_publica_controlada.md`: issue draft for the protected public demo deployment.
 - `issue_landing_page_project.md`: issue draft for the project landing page.
+- `../landing/index.html`: static trilingual landing page for EmpathyAI.
 - `architecture.md`, `privacy_model.md`, `ethical_framework.md`: legacy operational summaries retained for quick reference.

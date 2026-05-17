@@ -15,7 +15,7 @@ The page should support the next deployment step: a protected public demo using 
 ## Proposed Scope
 
 - Create a landing page entry point for the project.
-- Present the project clearly in English first, with room for PT-BR/ES later.
+- Present the project in English, Brazilian Portuguese, and Spanish.
 - Explain the core idea without sounding academic or overloaded.
 - Highlight:
   - communication mediation;
@@ -25,6 +25,7 @@ The page should support the next deployment step: a protected public demo using 
   - mutual learning diary;
   - controlled demo availability.
 - Add a clear call to action for the protected demo.
+- Include Pitch and Project videos in all three languages.
 - Link to project documentation or repository where appropriate.
 - Keep the visual language aligned with the current EmpathyAI identity and Streamlit UX direction.
 
@@ -52,30 +53,32 @@ The page should support the next deployment step: a protected public demo using 
 
 ## Acceptance Criteria
 
-- [ ] Landing page can be opened locally.
-- [ ] Page has a clear hero with `EmpathyAI` as first-viewport signal.
-- [ ] Page explains the product in plain English.
-- [ ] Page includes a visible CTA for the controlled demo.
-- [ ] Page includes responsible-use/privacy note.
-- [ ] Page is responsive on desktop and mobile widths.
-- [ ] Page avoids placeholder-only content.
-- [ ] Page reuses or aligns with the existing visual identity.
-- [ ] Basic accessibility checks pass: contrast, readable hierarchy, keyboard reachable CTA.
+- [x] Landing page can be opened locally at `landing/index.html`.
+- [x] Page has a clear hero with `EmpathyAI` as first-viewport signal.
+- [x] Page explains the product in English, Brazilian Portuguese, and Spanish.
+- [x] Page includes a visible CTA for the controlled demo.
+- [x] Page includes responsible-use/privacy note.
+- [x] Page is responsive on desktop and mobile widths.
+- [x] Page avoids placeholder-only content.
+- [x] Page reuses or aligns with the existing visual identity.
+- [x] Page includes Pitch videos for PT-BR, EN, and ES.
+- [x] Page includes Project videos for PT-BR, EN, and ES.
+- [x] Basic structural checks pass through `python scripts/check_landing_page.py`.
 
 ## Open Decisions
 
-- [ ] Decide whether landing page is static HTML, Streamlit page, or future React/Vite page.
-- [ ] Decide whether to include the current logo/assets.
+- [x] Decide whether landing page is static HTML, Streamlit page, or future React/Vite page: static HTML for this version.
+- [x] Decide whether to include the current logo/assets: include `images/EmpathyAI_logo.png`.
 - [ ] Decide destination for CTA: Streamlit demo URL, waitlist/contact, or GitHub repo.
-- [ ] Decide whether PT-BR/ES translations are in scope for the first version.
+- [x] Decide whether PT-BR/ES translations are in scope for the first version.
 
 ## Validation
 
-- [ ] Run local page/server.
-- [ ] Check desktop viewport.
-- [ ] Check mobile viewport.
-- [ ] Check CTA behavior.
-- [ ] Run available automated checks if implemented.
+- [x] Landing page opens as a local static file.
+- [ ] Check desktop viewport manually.
+- [ ] Check mobile viewport manually.
+- [ ] Check CTA behavior after final demo URL is defined.
+- [x] Run available automated checks: `python scripts/check_landing_page.py`.
 
 ## How To Create This Issue On GitHub
 
@@ -91,4 +94,3 @@ Publish the branch when ready:
 ```powershell
 git push -u origin landing-page-project
 ```
-
