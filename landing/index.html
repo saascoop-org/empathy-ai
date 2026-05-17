@@ -311,6 +311,32 @@
       border: 0;
     }
 
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .screenshot-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 14px 34px rgba(24, 51, 59, 0.06);
+    }
+
+    .screenshot-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .screenshot-card figcaption {
+      padding: 12px 14px 14px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
     .demo-band {
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
@@ -357,6 +383,7 @@
 
       .steps,
       .capability-grid,
+      .screenshot-grid,
       .media-grid,
       .demo-layout {
         grid-template-columns: 1fr;
@@ -408,7 +435,7 @@
           <p class="hero-copy">Turn communication friction into a safer, clearer bridge of understanding, with local-first AI support and explicit privacy controls.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#demo-en">Access controlled demo</a>
-            <a class="button button-secondary" href="#videos-en">Watch the project</a>
+            <a class="button button-secondary" href="#interface-en">View the interface</a>
           </div>
           <p class="hero-status">The current demo is designed for protected testing with VM + Ollama/Gemma4 + Streamlit, not open production use.</p>
         </div>
@@ -440,6 +467,33 @@
             <div class="capability"><h3>Suggested bridge</h3><p>Generate a practical sentence for repairing the exchange.</p></div>
             <div class="capability"><h3>Local-first controls</h3><p>Keep processing and storage aligned with demo privacy boundaries.</p></div>
             <div class="capability"><h3>Mutual learning diary</h3><p>Review consented anonymized records and reflection questions.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="interface-en" aria-labelledby="interface-title-en">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="interface-title-en">Interface preview</h2>
+            <p>See the English demo flow, from the guided form to the localized result and diary.</p>
+          </div>
+          <div class="screenshot-grid">
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-EN-1.png" alt="English EmpathyAI interface showing the main form and alterity map fields." loading="lazy">
+              <figcaption>Main analysis flow with visible context fields.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-EN-2.png" alt="English EmpathyAI interface showing feedback, privacy controls, and the analysis action." loading="lazy">
+              <figcaption>Consent, response feedback, and analysis action.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-EN-3.png" alt="English EmpathyAI result screen showing suggested bridge and explanatory sections." loading="lazy">
+              <figcaption>Suggested bridge highlighted as the primary result.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-EN-4.png" alt="English EmpathyAI diary showing saved anonymized learning records." loading="lazy">
+              <figcaption>Mutual learning diary with consented local records.</figcaption>
+            </figure>
           </div>
         </div>
       </section>
@@ -484,7 +538,7 @@
           <p class="hero-copy">Transforme atritos de comunicação em pontes de entendimento mais seguras e claras, com apoio de IA local-first e controles explícitos de privacidade.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#demo-pt">Acessar demo controlada</a>
-            <a class="button button-secondary" href="#videos-pt">Ver o projeto</a>
+            <a class="button button-secondary" href="#interface-pt">Ver a interface</a>
           </div>
           <p class="hero-status">A demo atual foi pensada para teste protegido com VM + Ollama/Gemma4 + Streamlit, não para uso produtivo aberto.</p>
         </div>
@@ -516,6 +570,33 @@
             <div class="capability"><h3>Ponte sugerida</h3><p>Gere uma frase prática para reparar a troca.</p></div>
             <div class="capability"><h3>Controles local-first</h3><p>Mantenha processamento e armazenamento alinhados aos limites de privacidade da demo.</p></div>
             <div class="capability"><h3>Diário de aprendizado mútuo</h3><p>Revise registros anonimizados e consentidos com perguntas de reflexão.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="interface-pt" aria-labelledby="interface-title-pt">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="interface-title-pt">Prévia da interface</h2>
+            <p>Veja o fluxo da demo em PT-BR, do formulário guiado ao resultado localizado e ao diário.</p>
+          </div>
+          <div class="screenshot-grid">
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-PT-BR-1.png" alt="Interface do EmpathyAI em português mostrando formulário principal e campos do mapa de alteridade." loading="lazy">
+              <figcaption>Fluxo principal com campos de contexto visíveis.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-PT-BR-2.png" alt="Interface do EmpathyAI em português mostrando feedback, controles de privacidade e ação de análise." loading="lazy">
+              <figcaption>Consentimento, feedback da resposta e ação de análise.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-PT-BR-3.png" alt="Tela de resultado do EmpathyAI em português mostrando ponte sugerida e seções explicativas." loading="lazy">
+              <figcaption>Ponte sugerida destacada como resultado principal.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-PT-BR-4.png" alt="Diário do EmpathyAI em português mostrando registros locais anonimizados e consentidos." loading="lazy">
+              <figcaption>Diário de aprendizado mútuo com registros locais consentidos.</figcaption>
+            </figure>
           </div>
         </div>
       </section>
@@ -560,7 +641,7 @@
           <p class="hero-copy">Convierte fricciones de comunicación en puentes de entendimiento más seguros y claros, con apoyo de IA local-first y controles explícitos de privacidad.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#demo-es">Acceder a la demo controlada</a>
-            <a class="button button-secondary" href="#videos-es">Ver el proyecto</a>
+            <a class="button button-secondary" href="#interface-es">Ver la interfaz</a>
           </div>
           <p class="hero-status">La demo actual está pensada para pruebas protegidas con VM + Ollama/Gemma4 + Streamlit, no para uso productivo abierto.</p>
         </div>
@@ -592,6 +673,33 @@
             <div class="capability"><h3>Puente sugerido</h3><p>Genera una frase práctica para reparar el intercambio.</p></div>
             <div class="capability"><h3>Controles local-first</h3><p>Mantén procesamiento y almacenamiento alineados con los límites de privacidad de la demo.</p></div>
             <div class="capability"><h3>Diario de aprendizaje mutuo</h3><p>Revisa registros anonimizados y consentidos con preguntas de reflexión.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="interface-es" aria-labelledby="interface-title-es">
+        <div class="section-inner">
+          <div class="section-heading">
+            <h2 id="interface-title-es">Vista previa de la interfaz</h2>
+            <p>Mira el flujo de la demo en español, desde el formulario guiado hasta el resultado localizado y el diario.</p>
+          </div>
+          <div class="screenshot-grid">
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-ES-1.png" alt="Interfaz de EmpathyAI en español mostrando el formulario principal y campos del mapa de alteridad." loading="lazy">
+              <figcaption>Flujo principal con campos de contexto visibles.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-ES-2.png" alt="Interfaz de EmpathyAI en español mostrando feedback, controles de privacidad y acción de análisis." loading="lazy">
+              <figcaption>Consentimiento, feedback de respuesta y acción de análisis.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-ES-3.png" alt="Pantalla de resultado de EmpathyAI en español mostrando puente sugerido y secciones explicativas." loading="lazy">
+              <figcaption>Puente sugerido destacado como resultado principal.</figcaption>
+            </figure>
+            <figure class="screenshot-card">
+              <img src="../images/screenshot-ES-4.png" alt="Diario de EmpathyAI en español mostrando registros locales anonimizados y consentidos." loading="lazy">
+              <figcaption>Diario de aprendizaje mutuo con registros locales consentidos.</figcaption>
+            </figure>
           </div>
         </div>
       </section>

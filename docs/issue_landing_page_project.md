@@ -2,9 +2,11 @@
 
 ## Context
 
-Create a public-facing landing page for EmpathyAI that explains the project, shows the value proposition, and directs visitors to the controlled demo flow.
+Create a public-facing landing page for EmpathyAI that explains the project, shows the value proposition, illustrates the interface, and directs visitors to the controlled demo flow.
 
 Branch: `landing-page-project`
+
+Target publishing channel: GitHub Pages.
 
 ## Goal
 
@@ -26,6 +28,7 @@ The page should support the next deployment step: a protected public demo using 
   - controlled demo availability.
 - Add a clear call to action for the protected demo.
 - Include Pitch and Project videos in all three languages.
+- Include interface screenshots that match the selected language.
 - Link to project documentation or repository where appropriate.
 - Keep the visual language aligned with the current EmpathyAI identity and Streamlit UX direction.
 
@@ -63,6 +66,7 @@ The page should support the next deployment step: a protected public demo using 
 - [x] Page reuses or aligns with the existing visual identity.
 - [x] Page includes Pitch videos for PT-BR, EN, and ES.
 - [x] Page includes Project videos for PT-BR, EN, and ES.
+- [x] Page includes interface screenshots for PT-BR, EN, and ES.
 - [x] Basic structural checks pass through `python scripts/check_landing_page.py`.
 
 ## Open Decisions
@@ -78,6 +82,7 @@ The page should support the next deployment step: a protected public demo using 
 - [ ] Check desktop viewport manually.
 - [ ] Check mobile viewport manually.
 - [ ] Check CTA behavior after final demo URL is defined.
+- [ ] Check GitHub Pages relative paths after publishing.
 - [x] Run available automated checks: `python scripts/check_landing_page.py`.
 
 ## How To Create This Issue On GitHub
