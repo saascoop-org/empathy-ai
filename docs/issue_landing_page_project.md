@@ -27,6 +27,7 @@ The page should support the next deployment step: a protected public demo using 
   - mutual learning diary;
   - controlled demo availability.
 - Add a clear call to action for the protected demo.
+- Start the controlled demo through the Cloud Run launcher and redirect to the returned VM URL.
 - Include Pitch and Project videos in all three languages.
 - Include interface screenshots that match the selected language.
 - Link to project documentation or repository where appropriate.
@@ -60,6 +61,9 @@ The page should support the next deployment step: a protected public demo using 
 - [x] Page has a clear hero with `EmpathyAI` as first-viewport signal.
 - [x] Page explains the product in English, Brazilian Portuguese, and Spanish.
 - [x] Page includes a visible CTA for the controlled demo.
+- [x] Controlled demo CTA calls the Cloud Run launcher endpoint.
+- [x] CTA shows progressive launch feedback, disabled state, spinner, and error handling.
+- [x] CTA supports launcher-provided signed `auth_url` or `demo_token`.
 - [x] Page includes responsible-use/privacy note.
 - [x] Page is responsive on desktop and mobile widths.
 - [x] Page avoids placeholder-only content.
@@ -73,7 +77,7 @@ The page should support the next deployment step: a protected public demo using 
 
 - [x] Decide whether landing page is static HTML, Streamlit page, or future React/Vite page: static HTML for this version.
 - [x] Decide whether to include the current logo/assets: include `images/EmpathyAI_logo.png`.
-- [ ] Decide destination for CTA: Streamlit demo URL, waitlist/contact, or GitHub repo.
+- [x] Decide destination for CTA: Cloud Run launcher returning the current Streamlit demo URL.
 - [x] Decide whether PT-BR/ES translations are in scope for the first version.
 
 ## Validation
@@ -81,7 +85,8 @@ The page should support the next deployment step: a protected public demo using 
 - [x] Landing page opens as a local static file.
 - [ ] Check desktop viewport manually.
 - [ ] Check mobile viewport manually.
-- [ ] Check CTA behavior after final demo URL is defined.
+- [ ] Check CTA behavior against the live Cloud Run launcher.
+- [ ] Configure Cloud Run CORS so the GitHub Pages origin can read the launcher response.
 - [ ] Check GitHub Pages relative paths after publishing.
 - [x] Run available automated checks: `python scripts/check_landing_page.py`.
 

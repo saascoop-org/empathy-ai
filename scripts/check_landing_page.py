@@ -3,6 +3,11 @@ from pathlib import Path
 
 
 LANDING_PATH = Path("landing/index.html")
+SESSION_EXPIRED_PATH = Path("landing/session-expired.html")
+ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
+LAUNCHER_ENDPOINT = (
+    "https://empathyai-demo-launcher-nepwxbwava-uc.a.run.app/start-demo"
+)
 REQUIRED_VIDEO_IDS = {
     "sA26L7lsu2M",
     "urQLq7XPmMo",
@@ -36,6 +41,7 @@ class LandingParser(HTMLParser):
         self.iframes = []
         self.images = []
         self.links = []
+        self.launch_buttons = 0
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -49,6 +55,8 @@ class LandingParser(HTMLParser):
             self.images.append(attributes.get("src", ""))
         if tag == "a":
             self.links.append(attributes.get("href", ""))
+        if "data-launch-demo" in attributes:
+            self.launch_buttons += 1
 
 
 def main() -> None:
@@ -80,12 +88,42 @@ def main() -> None:
     if missing_screenshots:
         raise SystemExit(f"landing: missing screenshot references: {missing_screenshots}")
 
-    if "Access controlled demo" not in source:
+    if "Launch Controlled Demo" not in source:
         raise SystemExit("landing: missing English CTA")
-    if "Acessar demo controlada" not in source:
+    if "Iniciar demo controlada" not in source:
         raise SystemExit("landing: missing Portuguese CTA")
-    if "Acceder a la demo controlada" not in source:
+    if "Iniciar demo controlada" not in source:
         raise SystemExit("landing: missing Spanish CTA")
+    if parser.launch_buttons != 3:
+        raise SystemExit(f"landing: expected 3 launch buttons, found {parser.launch_buttons}")
+    if LAUNCHER_ENDPOINT not in source:
+        raise SystemExit("landing: missing Cloud Run launcher endpoint")
+    for launch_text in (
+        "Initializing local AI runtime...",
+        "Loading empathy mediation agents...",
+        "Preparing secure controlled session...",
+        "Launching experience...",
+        "launcher CORS policy is updated",
+        "Access-Control-Allow-Origin for https://hackathonbrteam.github.io",
+        "automatic session shutdown to minimize infrastructure and environmental costs",
+    ):
+        if launch_text not in source:
+            raise SystemExit(f"landing: missing launch lifecycle text: {launch_text}")
+    for launch_token in (
+        "fetch(launcherEndpoint",
+        "readTokenizedDemoUrl(demoUrl, payload)",
+        "payload.auth_url || payload.authUrl || payload.authURL",
+        "payload.demo_token || payload.demoToken || payload.token",
+        'url.searchParams.set("demo_token", demoToken)',
+        "readDemoUrl(payload)",
+        "window.location.assign(demoUrl)",
+        "button.disabled = isDisabled",
+    ):
+        if launch_token not in source:
+            raise SystemExit(f"landing: missing launch behavior token: {launch_token}")
+    for unsafe_token in ("url.username", "url.password", "payload.password", "credentials.password"):
+        if unsafe_token in source:
+            raise SystemExit(f"landing: must not expose Basic Auth credential handling: {unsafe_token}")
     if "@media (max-width: 860px)" not in source:
         raise SystemExit("landing: missing responsive breakpoint")
     if "function detectPreferredLanguage()" not in source:
@@ -95,6 +133,18 @@ def main() -> None:
     for language_prefix in ('startsWith("pt")', 'startsWith("es")', 'startsWith("en")'):
         if language_prefix not in source:
             raise SystemExit(f"landing: missing language prefix rule {language_prefix}")
+
+    expired_source = SESSION_EXPIRED_PATH.read_text(encoding="utf-8")
+    if "Session expired" not in expired_source:
+        raise SystemExit("landing: missing session expired page title")
+    if "infrastructure and environmental costs" not in expired_source:
+        raise SystemExit("landing: missing sustainability message")
+    if "detectPreferredLanguage" not in expired_source:
+        raise SystemExit("landing: session expired page missing language detection")
+
+    root_expired_source = ROOT_SESSION_EXPIRED_PATH.read_text(encoding="utf-8")
+    if "landing/session-expired.html" not in root_expired_source:
+        raise SystemExit("landing: root session-expired redirect is missing")
 
     print("landing: ok")
 

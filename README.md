@@ -89,6 +89,11 @@ GEMMA_MODEL=gemma3:1b
 INTERACTION_DB_PATH=data/interactions.sqlite3
 DEFAULT_UI_LANGUAGE=en
 PROCESSING_LANGUAGE=en
+SESSION_TIMEOUT_MS=180000
+SESSION_TIMEOUT_WARNING_MS=150000
+SESSION_EXPIRED_URL=/session-expired.html
+DEMO_TOKEN_SECRET=
+DEMO_TOKEN_TTL_SECONDS=300
 ```
 
 `gemma4:e2b` is available as a higher-memory target model, but the local demo uses `gemma3:1b` because it fits the available machine memory. If Ollama cannot run the configured model, the app keeps the deterministic multi-agent flow available and falls back to a safe bridge response.
@@ -96,6 +101,10 @@ PROCESSING_LANGUAGE=en
 The interface supports English, Brazilian Portuguese, and Spanish. The default UI language is controlled by `DEFAULT_UI_LANGUAGE`. Text processing remains English by default through `PROCESSING_LANGUAGE=en`; when user language detection is inconclusive, the app assumes English. User-facing output is translated for presentation into the selected interface language.
 
 Locale files live in `empathy_engine/i18n/locales/`, with English as the fallback language when a translation key is missing.
+
+The Streamlit demo includes a browser-side inactivity timeout guard. It listens only to human interaction events such as mouse, keyboard, click, scroll, and touch activity. If the user is inactive for `SESSION_TIMEOUT_MS`, the browser leaves the Streamlit app and opens `SESSION_EXPIRED_URL`, allowing WebSocket connections to close naturally so VM idle-shutdown automation can detect zero active sessions.
+
+For controlled public demos, set `DEMO_TOKEN_SECRET` to require a signed `demo_token` query parameter before the Streamlit interface is shown. Tokens are HMAC-signed, include `iat`, `exp`, and `nonce` claims, and default to a 5-minute TTL through `DEMO_TOKEN_TTL_SECONDS=300`. The token is removed from the browser URL after validation.
 
 ## Spec Driven Development
 

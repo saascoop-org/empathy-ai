@@ -75,6 +75,40 @@ def main() -> None:
 
     if "st.audio_input(" not in source:
         raise SystemExit("ux-a11y: optional audio input is missing from the demo UI")
+    if "render_session_timeout_guard(settings)" not in source:
+        raise SystemExit("ux-a11y: session timeout guard is not rendered")
+    for event_name in ("pointermove", "pointerdown", "mousemove", "keydown", "wheel", "touchstart"):
+        if event_name not in source:
+            raise SystemExit(f"ux-a11y: timeout guard must watch {event_name}")
+    if "__empathyInactivityTimeoutGuard" not in source:
+        raise SystemExit("ux-a11y: timeout guard must reinstall cleanly across rerenders")
+    if "parentWindow.location.replace(expiredUrl)" not in source:
+        raise SystemExit("ux-a11y: timeout guard must redirect the parent window")
+    if "previousGuard.destroy()" not in source:
+        raise SystemExit("ux-a11y: timeout guard must clear previous timers/listeners")
+    if "parentWindow.addEventListener(eventName, resetTimers, true)" not in source:
+        raise SystemExit("ux-a11y: timeout guard must watch human interaction events")
+    for timeout_token in (
+        "lastHumanActivity = Date.now()",
+        "setInterval(checkInactivity, 1000)",
+        "clearInterval(watchdogTimer)",
+    ):
+        if timeout_token not in source:
+            raise SystemExit(f"ux-a11y: missing timeout watchdog token: {timeout_token}")
+    if '"visibilitychange"' in source:
+        raise SystemExit("ux-a11y: visibility changes must not reset inactivity timers")
+    if "_stcore/health" in source or "_stcore/stream" in source:
+        raise SystemExit("ux-a11y: timeout guard should not depend on Streamlit health traffic")
+    if "Session will expire soon due to inactivity" not in source:
+        raise SystemExit("ux-a11y: timeout warning copy is missing")
+    for token_guard in (
+        "enforce_demo_token_access(settings)",
+        'st.query_params.get("demo_token", "")',
+        "validate_demo_token(",
+        'del st.query_params["demo_token"]',
+    ):
+        if token_guard not in source:
+            raise SystemExit(f"ux-a11y: missing demo token guard: {token_guard}")
 
     print("ux-a11y: ok")
 

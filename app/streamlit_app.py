@@ -29,6 +29,7 @@ from empathy_engine.presentation.learning_diary import (
 )
 from empathy_engine.presentation.result_presenter import ResultPresenter
 from empathy_engine.safety.logging import configure_safe_logging
+from empathy_engine.security.demo_token import DemoTokenError, validate_demo_token
 from empathy_engine.storage.interaction_store import InteractionStore
 from empathy_engine.use_cases.analyze_interaction import (
     AnalyzeInteractionCommand,
@@ -287,6 +288,193 @@ try:
 except (ValueError, ValidationError) as error:
     st.error(f"Invalid application configuration: {error}")
     st.stop()
+
+
+def enforce_demo_token_access(settings):
+    if not settings.demo_token_secret and "demo_token" in st.query_params:
+        del st.query_params["demo_token"]
+        return
+    if not settings.demo_token_secret:
+        return
+    if st.session_state.get("demo_token_validated"):
+        return
+
+    token = st.query_params.get("demo_token", "")
+    try:
+        validate_demo_token(
+            token,
+            settings.demo_token_secret,
+            max_ttl_seconds=settings.demo_token_ttl_seconds,
+        )
+    except DemoTokenError:
+        st.error(
+            "This controlled demo link is missing, expired, or invalid. "
+            "Please relaunch the demo from the landing page."
+        )
+        st.stop()
+
+    st.session_state["demo_token_validated"] = True
+    if "demo_token" in st.query_params:
+        del st.query_params["demo_token"]
+
+
+enforce_demo_token_access(settings)
+
+
+def render_session_timeout_guard(settings):
+    timeout_ms = settings.session_timeout_ms
+    warning_ms = min(settings.session_timeout_warning_ms, timeout_ms)
+    expired_url = settings.session_expired_url
+
+    components.html(
+        f"""
+        <script>
+          (() => {{
+            const timeoutMs = {json.dumps(timeout_ms)};
+            const warningMs = {json.dumps(warning_ms)};
+            const expiredUrl = {json.dumps(expired_url)};
+            const parentWindow = window.parent || window;
+            let parentDocument = document;
+            try {{
+              parentDocument = parentWindow.document || document;
+            }} catch (error) {{
+              parentDocument = document;
+            }}
+            const humanEvents = [
+              "pointermove",
+              "pointerdown",
+              "mousemove",
+              "mousedown",
+              "keydown",
+              "keyup",
+              "click",
+              "scroll",
+              "wheel",
+              "touchstart",
+              "touchmove"
+            ];
+            let warningTimer = null;
+            let expirationTimer = null;
+            let watchdogTimer = null;
+            let lastHumanActivity = Date.now();
+            let expired = false;
+            const previousGuard = parentWindow.__empathyInactivityTimeoutGuard;
+
+            if (previousGuard && typeof previousGuard.destroy === "function") {{
+              previousGuard.destroy();
+            }}
+
+            function ensureWarning() {{
+              let warning = parentDocument.getElementById("empathy-session-warning");
+              if (warning) {{
+                return warning;
+              }}
+
+              warning = parentDocument.createElement("div");
+              warning.id = "empathy-session-warning";
+              warning.setAttribute("role", "status");
+              warning.setAttribute("aria-live", "polite");
+              warning.textContent = "Session will expire soon due to inactivity. This controlled demo uses automatic session shutdown to minimize infrastructure and environmental costs.";
+              warning.style.cssText = [
+                "position: fixed",
+                "right: 24px",
+                "bottom: 24px",
+                "z-index: 2147483647",
+                "max-width: 420px",
+                "border: 1px solid rgba(13, 127, 136, 0.32)",
+                "border-left: 6px solid #0d7f88",
+                "border-radius: 8px",
+                "background: #ffffff",
+                "color: #18333b",
+                "box-shadow: 0 18px 42px rgba(24, 51, 59, 0.18)",
+                "font: 600 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                "padding: 14px 16px",
+                "display: none"
+              ].join(";");
+              parentDocument.body.appendChild(warning);
+              return warning;
+            }}
+
+            function hideWarning() {{
+              const warning = parentDocument.getElementById("empathy-session-warning");
+              if (warning) {{
+                warning.style.display = "none";
+              }}
+            }}
+
+            function showWarning() {{
+              ensureWarning().style.display = "block";
+            }}
+
+            function expireSession() {{
+              if (expired) {{
+                return;
+              }}
+              expired = true;
+              destroy();
+              try {{
+                parentWindow.location.replace(expiredUrl);
+              }} catch (error) {{
+                window.location.replace(expiredUrl);
+              }}
+            }}
+
+            function checkInactivity() {{
+              if (expired) {{
+                return;
+              }}
+              const idleMs = Date.now() - lastHumanActivity;
+              if (idleMs >= timeoutMs) {{
+                expireSession();
+                return;
+              }}
+              if (idleMs >= warningMs) {{
+                showWarning();
+              }}
+            }}
+
+            function resetTimers() {{
+              if (expired) {{
+                return;
+              }}
+              lastHumanActivity = Date.now();
+              hideWarning();
+              clearTimeout(warningTimer);
+              clearTimeout(expirationTimer);
+              warningTimer = setTimeout(showWarning, warningMs);
+              expirationTimer = setTimeout(expireSession, timeoutMs);
+            }}
+
+            function destroy() {{
+              clearTimeout(warningTimer);
+              clearTimeout(expirationTimer);
+              clearInterval(watchdogTimer);
+              humanEvents.forEach((eventName) => {{
+                parentDocument.removeEventListener(eventName, resetTimers, true);
+                parentWindow.removeEventListener(eventName, resetTimers, true);
+              }});
+              if (parentWindow.__empathyInactivityTimeoutGuard === guard) {{
+                delete parentWindow.__empathyInactivityTimeoutGuard;
+              }}
+            }}
+
+            const guard = {{ destroy }};
+            parentWindow.__empathyInactivityTimeoutGuard = guard;
+            ensureWarning();
+            humanEvents.forEach((eventName) => {{
+              parentDocument.addEventListener(eventName, resetTimers, true);
+              parentWindow.addEventListener(eventName, resetTimers, true);
+            }});
+            resetTimers();
+            watchdogTimer = setInterval(checkInactivity, 1000);
+          }})();
+        </script>
+        """,
+        height=1,
+    )
+
+
+render_session_timeout_guard(settings)
 
 
 def resolve_initial_ui_language() -> str:

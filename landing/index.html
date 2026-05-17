@@ -178,11 +178,25 @@
       font-weight: 800;
       text-decoration: none;
       padding: 11px 16px;
+      cursor: pointer;
+      transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease;
     }
 
     .button-primary {
       background: var(--teal);
       color: #ffffff;
+    }
+
+    .button-primary:hover,
+    .button-primary:focus-visible {
+      box-shadow: 0 14px 32px rgba(13, 127, 136, 0.24);
+      transform: translateY(-1px);
+    }
+
+    .button:disabled {
+      cursor: wait;
+      opacity: 0.68;
+      transform: none;
     }
 
     .button-secondary {
@@ -198,6 +212,74 @@
       border-top: 1px solid rgba(13, 127, 136, 0.22);
       color: var(--muted);
       font-size: 0.96rem;
+    }
+
+    .launch-status {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 50;
+      width: min(420px, calc(100% - 32px));
+      padding: 18px;
+      border: 1px solid rgba(13, 127, 136, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 24px 70px rgba(19, 45, 52, 0.18);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .launch-status.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .launch-status.is-error {
+      border-color: rgba(255, 107, 99, 0.56);
+    }
+
+    .launch-status-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .launch-spinner {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      border: 3px solid rgba(13, 127, 136, 0.18);
+      border-top-color: var(--teal);
+      border-radius: 999px;
+      animation: spin 900ms linear infinite;
+    }
+
+    .launch-status.is-error .launch-spinner {
+      animation: none;
+      border-color: rgba(255, 107, 99, 0.45);
+      border-top-color: rgba(255, 107, 99, 0.95);
+    }
+
+    .launch-status-title {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .launch-status-message,
+    .launch-status-detail {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     main section {
@@ -434,10 +516,10 @@
           <h1 id="hero-title-en">EmpathyAI</h1>
           <p class="hero-copy">Turn communication friction into a safer, clearer bridge of understanding, with local-first AI support and explicit privacy controls.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo-en">Access controlled demo</a>
+            <button class="button button-primary" type="button" data-launch-demo>Launch Controlled Demo</button>
             <a class="button button-secondary" href="#interface-en">View the interface</a>
           </div>
-          <p class="hero-status">The current demo is designed for protected testing with VM + Ollama/Gemma4 + Streamlit, not open production use.</p>
+          <p class="hero-status">The controlled demo starts a protected VM + Ollama/Gemma4 + Streamlit session on demand, with automatic shutdown to minimize infrastructure and environmental costs.</p>
         </div>
       </section>
 
@@ -537,10 +619,10 @@
           <h1 id="hero-title-pt">EmpathyAI</h1>
           <p class="hero-copy">Transforme atritos de comunicação em pontes de entendimento mais seguras e claras, com apoio de IA local-first e controles explícitos de privacidade.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo-pt">Acessar demo controlada</a>
+            <button class="button button-primary" type="button" data-launch-demo>Iniciar demo controlada</button>
             <a class="button button-secondary" href="#interface-pt">Ver a interface</a>
           </div>
-          <p class="hero-status">A demo atual foi pensada para teste protegido com VM + Ollama/Gemma4 + Streamlit, não para uso produtivo aberto.</p>
+          <p class="hero-status">A demo controlada inicia sob demanda uma sessão protegida com VM + Ollama/Gemma4 + Streamlit, com desligamento automático para reduzir custos de infraestrutura e impacto ambiental.</p>
         </div>
       </section>
 
@@ -640,10 +722,10 @@
           <h1 id="hero-title-es">EmpathyAI</h1>
           <p class="hero-copy">Convierte fricciones de comunicación en puentes de entendimiento más seguros y claros, con apoyo de IA local-first y controles explícitos de privacidad.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo-es">Acceder a la demo controlada</a>
+            <button class="button button-primary" type="button" data-launch-demo>Iniciar demo controlada</button>
             <a class="button button-secondary" href="#interface-es">Ver la interfaz</a>
           </div>
-          <p class="hero-status">La demo actual está pensada para pruebas protegidas con VM + Ollama/Gemma4 + Streamlit, no para uso productivo abierto.</p>
+          <p class="hero-status">La demo controlada inicia bajo demanda una sesión protegida con VM + Ollama/Gemma4 + Streamlit, con apagado automático para reducir costos de infraestructura e impacto ambiental.</p>
         </div>
       </section>
 
@@ -737,6 +819,17 @@
     </article>
   </main>
 
+  <aside class="launch-status" data-launch-status aria-live="polite" aria-hidden="true">
+    <div class="launch-status-row">
+      <span class="launch-spinner" aria-hidden="true"></span>
+      <div>
+        <p class="launch-status-title" data-launch-title>Launching controlled demo</p>
+        <p class="launch-status-message" data-launch-message>Initializing local AI runtime...</p>
+        <p class="launch-status-detail" data-launch-detail>This controlled demo uses automatic session shutdown to minimize infrastructure and environmental costs.</p>
+      </div>
+    </div>
+  </aside>
+
   <footer class="footer">
     <div class="footer-inner">
       <span>EmpathyAI Cognitive Mediator</span>
@@ -748,6 +841,55 @@
     const languageButtons = document.querySelectorAll("[data-language-button]");
     const layers = document.querySelectorAll("[data-language]");
     const fallbackLanguage = "en";
+    const launcherEndpoint = "https://empathyai-demo-launcher-nepwxbwava-uc.a.run.app/start-demo";
+    const launchButtons = document.querySelectorAll("[data-launch-demo]");
+    const launchStatus = document.querySelector("[data-launch-status]");
+    const launchTitle = document.querySelector("[data-launch-title]");
+    const launchMessage = document.querySelector("[data-launch-message]");
+    const launchDetail = document.querySelector("[data-launch-detail]");
+    let currentLanguage = fallbackLanguage;
+    let launchMessageTimer = null;
+    const launchCopy = {
+      en: {
+        title: "Launching controlled demo",
+        messages: [
+          "Initializing local AI runtime...",
+          "Loading empathy mediation agents...",
+          "Preparing secure controlled session...",
+          "Launching experience..."
+        ],
+        sustainability: "This controlled demo uses automatic session shutdown to minimize infrastructure and environmental costs.",
+        redirecting: "Demo is ready. Redirecting to the secure session...",
+        error: "The demo could not be started right now. Please try again in a moment.",
+        networkError: "The demo gateway is not allowing browser access from this page yet. Please retry after the launcher CORS policy is updated."
+      },
+      pt: {
+        title: "Iniciando demo controlada",
+        messages: [
+          "Inicializando runtime local de IA...",
+          "Carregando agentes de mediação empática...",
+          "Preparando sessão controlada segura...",
+          "Abrindo experiência..."
+        ],
+        sustainability: "Esta demo controlada usa encerramento automático de sessão para reduzir custos de infraestrutura e impacto ambiental.",
+        redirecting: "A demo está pronta. Redirecionando para a sessão segura...",
+        error: "Não foi possível iniciar a demo agora. Tente novamente em instantes.",
+        networkError: "O gateway da demo ainda não permite acesso do navegador a partir desta página. Tente novamente após atualizar a política de CORS do launcher."
+      },
+      es: {
+        title: "Iniciando demo controlada",
+        messages: [
+          "Inicializando runtime local de IA...",
+          "Cargando agentes de mediación empática...",
+          "Preparando sesión controlada segura...",
+          "Abriendo experiencia..."
+        ],
+        sustainability: "Esta demo controlada usa cierre automático de sesión para reducir costos de infraestructura e impacto ambiental.",
+        redirecting: "La demo está lista. Redirigiendo a la sesión segura...",
+        error: "No fue posible iniciar la demo ahora. Inténtalo nuevamente en unos instantes.",
+        networkError: "La puerta de enlace de la demo todavía no permite acceso del navegador desde esta página. Inténtalo nuevamente después de actualizar la política CORS del launcher."
+      }
+    };
 
     function detectPreferredLanguage() {
       const browserLanguages = navigator.languages && navigator.languages.length
@@ -772,6 +914,7 @@
 
     function setLanguage(language) {
       const supportedLanguage = ["en", "pt", "es"].includes(language) ? language : fallbackLanguage;
+      currentLanguage = supportedLanguage;
       document.documentElement.lang = supportedLanguage === "pt" ? "pt-BR" : supportedLanguage;
       languageButtons.forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.languageButton === supportedLanguage));
@@ -779,10 +922,139 @@
       layers.forEach((layer) => {
         layer.classList.toggle("is-active", layer.dataset.language === supportedLanguage);
       });
+      updateLaunchStatusCopy(0);
+    }
+
+    function updateLaunchStatusCopy(messageIndex) {
+      const copy = launchCopy[currentLanguage] || launchCopy[fallbackLanguage];
+      if (launchTitle) {
+        launchTitle.textContent = copy.title;
+      }
+      if (launchMessage) {
+        launchMessage.textContent = copy.messages[messageIndex] || copy.messages[0];
+      }
+      if (launchDetail) {
+        launchDetail.textContent = copy.sustainability;
+      }
+    }
+
+    function showLaunchStatus() {
+      if (!launchStatus) {
+        return;
+      }
+      launchStatus.classList.add("is-visible");
+      launchStatus.classList.remove("is-error");
+      launchStatus.setAttribute("aria-hidden", "false");
+    }
+
+    function setLaunchButtonsDisabled(isDisabled) {
+      launchButtons.forEach((button) => {
+        button.disabled = isDisabled;
+      });
+    }
+
+    function beginLaunchMessages() {
+      const copy = launchCopy[currentLanguage] || launchCopy[fallbackLanguage];
+      let messageIndex = 0;
+      updateLaunchStatusCopy(messageIndex);
+      clearInterval(launchMessageTimer);
+      launchMessageTimer = setInterval(() => {
+        messageIndex = Math.min(messageIndex + 1, copy.messages.length - 1);
+        updateLaunchStatusCopy(messageIndex);
+      }, 1800);
+    }
+
+    function readTokenizedDemoUrl(demoUrl, payload) {
+      const authUrl = payload.auth_url || payload.authUrl || payload.authURL;
+      if (authUrl) {
+        return authUrl;
+      }
+
+      const demoToken = payload.demo_token || payload.demoToken || payload.token;
+      if (!demoToken) {
+        return "";
+      }
+
+      try {
+        const url = new URL(demoUrl);
+        url.searchParams.set("demo_token", demoToken);
+        return url.toString();
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function readDemoUrl(payload) {
+      const demoUrl = payload.demo_url
+        || payload.demoUrl
+        || payload.demoURL
+        || payload.url
+        || (payload.demo && (payload.demo.url || payload.demo.demo_url || payload.demo.demoUrl));
+      return demoUrl ? readTokenizedDemoUrl(demoUrl, payload) : "";
+    }
+
+    function describeLauncherState(payload) {
+      const status = payload.vm_status || payload.vmStatus || payload.status;
+      const externalIp = payload.external_ip || payload.externalIp || payload.ip;
+      return [status, externalIp].filter(Boolean).join(" · ");
+    }
+
+    async function launchControlledDemo() {
+      const copy = launchCopy[currentLanguage] || launchCopy[fallbackLanguage];
+      setLaunchButtonsDisabled(true);
+      showLaunchStatus();
+      beginLaunchMessages();
+
+      try {
+        const response = await fetch(launcherEndpoint, {
+          method: "GET",
+          headers: { "Accept": "application/json" },
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(`Launcher returned HTTP ${response.status}`);
+        }
+
+        const payload = await response.json();
+        const demoUrl = readDemoUrl(payload);
+        if (!demoUrl) {
+          throw new Error("Launcher response did not include a demo URL");
+        }
+
+        clearInterval(launchMessageTimer);
+        if (launchMessage) {
+          launchMessage.textContent = copy.redirecting;
+        }
+        const stateDescription = describeLauncherState(payload);
+        if (stateDescription && launchDetail) {
+          launchDetail.textContent = stateDescription;
+        }
+        window.location.assign(demoUrl);
+      } catch (error) {
+        clearInterval(launchMessageTimer);
+        setLaunchButtonsDisabled(false);
+        if (launchStatus) {
+          launchStatus.classList.add("is-error");
+        }
+        const isNetworkBlock = error instanceof TypeError;
+        if (launchMessage) {
+          launchMessage.textContent = isNetworkBlock ? copy.networkError : copy.error;
+        }
+        if (launchDetail) {
+          launchDetail.textContent = isNetworkBlock
+            ? "Cloud Run must return Access-Control-Allow-Origin for https://hackathonbrteam.github.io."
+            : error.message || copy.sustainability;
+        }
+      }
     }
 
     languageButtons.forEach((button) => {
       button.addEventListener("click", () => setLanguage(button.dataset.languageButton));
+    });
+
+    launchButtons.forEach((button) => {
+      button.addEventListener("click", launchControlledDemo);
     });
 
     setLanguage(detectPreferredLanguage());
