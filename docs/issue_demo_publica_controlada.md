@@ -46,6 +46,7 @@ Publish only as a controlled demo, not as an open demo:
 - [x] Add landing-page launch flow for the Cloud Run launcher endpoint.
 - [x] Add progressive launch messages, spinner, disabled CTA state, and graceful error state.
 - [x] Redirect automatically to the launcher-provided demo URL.
+- [ ] Configure the Cloud Run launcher CORS response for the GitHub Pages origin.
 - [ ] Confirm that no raw data is persisted.
 - [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
 - [ ] Document demo start/stop operations.
@@ -65,6 +66,28 @@ Publish only as a controlled demo, not as an open demo:
 - [ ] Manual inactivity timeout test in the public VM environment.
 - [ ] Manual Cloud Run launcher test.
 - [ ] Manual dynamic redirect test with current VM external IP.
+- [ ] Confirm `Access-Control-Allow-Origin: https://hackathonbrteam.github.io` is present on `/start-demo`.
+
+## Current Browser Blocker
+
+The Cloud Run launcher currently responds successfully to `/start-demo`, but the browser blocks the GitHub Pages request because the response does not include an `Access-Control-Allow-Origin` header for `https://hackathonbrteam.github.io`.
+
+Required launcher response headers:
+
+```http
+Access-Control-Allow-Origin: https://hackathonbrteam.github.io
+Vary: Origin
+```
+
+The endpoint should keep returning JSON with the current VM URL, for example:
+
+```json
+{
+  "message": "Demo VM is ready.",
+  "status": "running",
+  "url": "http://<current-vm-ip>"
+}
+```
 
 ## Known Risks
 

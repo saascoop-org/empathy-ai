@@ -103,6 +103,8 @@ def main() -> None:
         "Loading empathy mediation agents...",
         "Preparing secure controlled session...",
         "Launching experience...",
+        "launcher CORS policy is updated",
+        "Access-Control-Allow-Origin for https://hackathonbrteam.github.io",
         "automatic session shutdown to minimize infrastructure and environmental costs",
     ):
         if launch_text not in source:

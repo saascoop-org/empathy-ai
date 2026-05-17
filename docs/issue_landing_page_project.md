@@ -85,6 +85,7 @@ The page should support the next deployment step: a protected public demo using 
 - [ ] Check desktop viewport manually.
 - [ ] Check mobile viewport manually.
 - [ ] Check CTA behavior against the live Cloud Run launcher.
+- [ ] Configure Cloud Run CORS so the GitHub Pages origin can read the launcher response.
 - [ ] Check GitHub Pages relative paths after publishing.
 - [x] Run available automated checks: `python scripts/check_landing_page.py`.
 

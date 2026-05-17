@@ -860,7 +860,8 @@
         ],
         sustainability: "This controlled demo uses automatic session shutdown to minimize infrastructure and environmental costs.",
         redirecting: "Demo is ready. Redirecting to the secure session...",
-        error: "The demo could not be started right now. Please try again in a moment."
+        error: "The demo could not be started right now. Please try again in a moment.",
+        networkError: "The demo gateway is not allowing browser access from this page yet. Please retry after the launcher CORS policy is updated."
       },
       pt: {
         title: "Iniciando demo controlada",
@@ -872,7 +873,8 @@
         ],
         sustainability: "Esta demo controlada usa encerramento automático de sessão para reduzir custos de infraestrutura e impacto ambiental.",
         redirecting: "A demo está pronta. Redirecionando para a sessão segura...",
-        error: "Não foi possível iniciar a demo agora. Tente novamente em instantes."
+        error: "Não foi possível iniciar a demo agora. Tente novamente em instantes.",
+        networkError: "O gateway da demo ainda não permite acesso do navegador a partir desta página. Tente novamente após atualizar a política de CORS do launcher."
       },
       es: {
         title: "Iniciando demo controlada",
@@ -884,7 +886,8 @@
         ],
         sustainability: "Esta demo controlada usa cierre automático de sesión para reducir costos de infraestructura e impacto ambiental.",
         redirecting: "La demo está lista. Redirigiendo a la sesión segura...",
-        error: "No fue posible iniciar la demo ahora. Inténtalo nuevamente en unos instantes."
+        error: "No fue posible iniciar la demo ahora. Inténtalo nuevamente en unos instantes.",
+        networkError: "La puerta de enlace de la demo todavía no permite acceso del navegador desde esta página. Inténtalo nuevamente después de actualizar la política CORS del launcher."
       }
     };
 
@@ -1013,11 +1016,14 @@
         if (launchStatus) {
           launchStatus.classList.add("is-error");
         }
+        const isNetworkBlock = error instanceof TypeError;
         if (launchMessage) {
-          launchMessage.textContent = copy.error;
+          launchMessage.textContent = isNetworkBlock ? copy.networkError : copy.error;
         }
         if (launchDetail) {
-          launchDetail.textContent = error.message || copy.sustainability;
+          launchDetail.textContent = isNetworkBlock
+            ? "Cloud Run must return Access-Control-Allow-Origin for https://hackathonbrteam.github.io."
+            : error.message || copy.sustainability;
         }
       }
     }
