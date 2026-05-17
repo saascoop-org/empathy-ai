@@ -1,72 +1,72 @@
-# Issue Draft: Preparar demo publica controlada com VM, Ollama/Gemma4 e Streamlit
+# Issue Draft: Prepare controlled public demo with VM, Ollama/Gemma4, and Streamlit
 
-## Contexto
+## Context
 
-Queremos disponibilizar o EmpathyAI para teste em uma URL publica controlada, mantendo a arquitetura atual no curto prazo: VM protegida + Ollama/Gemma4 + Streamlit, com diario efemero.
+We want to make EmpathyAI available for testing through a controlled public URL while keeping the current short-term architecture: protected VM + Ollama/Gemma4 + Streamlit, with an ephemeral diary.
 
-Esta issue trata do proximo passo de implantacao. O pacote de UX ja implementado na branch `ux-demo-readiness-streamlit` deve ser registrado separadamente em `docs/issue_ux_demo_readiness_streamlit.md`.
+This issue covers the next deployment step. The UX package already implemented in the `ux-demo-readiness-streamlit` branch should remain registered separately in `docs/issue_ux_demo_readiness_streamlit.md`.
 
-## Decisao recomendada para a URL publica
+## Recommended Decision For The Public URL
 
-Publicar apenas como demo controlada, nao como demo aberta:
+Publish only as a controlled demo, not as an open demo:
 
-- VM com RAM/VRAM suficiente para Gemma4.
-- Ollama e Streamlit no mesmo servidor ou rede privada.
-- HTTPS obrigatorio.
-- Autenticacao simples ou link protegido.
-- Porta do Ollama nao exposta publicamente.
-- Diario efemero por sessao ou desativado para evitar mistura de dados entre testers.
-- Limite de concorrencia/rate limit.
-- Rotina de limpeza de dados apos testes.
+- VM with enough RAM/VRAM for Gemma4.
+- Ollama and Streamlit running on the same server or private network.
+- HTTPS required.
+- Simple authentication or protected link.
+- Ollama port must not be publicly exposed.
+- Ephemeral diary per session, or persistence disabled, to avoid mixing data between testers.
+- Concurrency limit/rate limiting.
+- Data cleanup routine after tests.
 
-## Escopo da demo publica controlada
+## Controlled Public Demo Scope
 
-- Expor a interface Streamlit por uma URL publica protegida.
-- Executar o modelo Gemma4 via Ollama no servidor da demo.
-- Manter a experiencia de UX implementada na branch `ux-demo-readiness-streamlit`.
-- Usar persistencia efemera para o diario de aprendizado mutuo.
-- Garantir que a demo seja adequada para teste limitado, nao para producao aberta.
+- Expose the Streamlit interface through a protected public URL.
+- Run the Gemma4 model through Ollama on the demo server.
+- Keep the UX experience implemented in the `ux-demo-readiness-streamlit` branch.
+- Use ephemeral persistence for the mutual learning diary.
+- Ensure the demo is suitable for limited testing, not open production use.
 
-## Pendencias para implantacao
+## Deployment Pending Items
 
-- [ ] Definir provedor/tamanho da VM compativel com Gemma4.
-- [ ] Validar `gemma4:e2b` com memoria suficiente no servidor.
-- [ ] Configurar Ollama no servidor e baixar o modelo definido em `GEMMA_MODEL`.
-- [ ] Configurar Streamlit para host publico atras de proxy/HTTPS.
-- [ ] Proteger acesso com autenticacao ou senha.
-- [ ] Garantir que a porta do Ollama nao fique exposta publicamente.
-- [ ] Implementar politica de diario efemero ou desativar persistencia entre usuarios.
-- [ ] Confirmar que nenhum dado cru e persistido.
-- [ ] Definir limpeza automatica de `data/interactions.sqlite3` ou storage temporario.
-- [ ] Documentar operacao de start/stop da demo.
-- [ ] Executar checklist de validacao antes de liberar a URL.
+- [ ] Define a VM provider/size compatible with Gemma4.
+- [ ] Validate `gemma4:e2b` with enough memory on the server.
+- [ ] Configure Ollama on the server and download the model defined in `GEMMA_MODEL`.
+- [ ] Configure Streamlit for public hosting behind proxy/HTTPS.
+- [ ] Protect access with authentication or password.
+- [ ] Ensure the Ollama port is not publicly exposed.
+- [ ] Implement an ephemeral diary policy or disable persistence between users.
+- [ ] Confirm that no raw data is persisted.
+- [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
+- [ ] Document demo start/stop operations.
+- [ ] Run the validation checklist before releasing the URL.
 
-## Checklist de validacao antes da URL
+## Validation Checklist Before Releasing The URL
 
 - [ ] `python -m pytest`
 - [ ] `python scripts/smoke_test.py`
 - [ ] `python scripts/check_ux_accessibility.py`
 - [ ] `python scripts/check_streamlit.py`
-- [ ] Teste manual de idioma PT-BR.
-- [ ] Teste manual do diario efemero.
-- [ ] Teste manual de concorrencia minima.
-- [ ] Teste manual de acesso HTTPS.
-- [ ] Teste manual de bloqueio da porta do Ollama.
+- [ ] Manual PT-BR language test.
+- [ ] Manual ephemeral diary test.
+- [ ] Manual minimal concurrency test.
+- [ ] Manual HTTPS access test.
+- [ ] Manual Ollama port blocking test.
 
-## Riscos conhecidos
+## Known Risks
 
-- Streamlit ainda nao e o front ideal para teste publico multiusuario.
-- SQLite local precisa isolamento ou uso efemero para multiplos testers.
-- Gemma4 pode apresentar latencia alta e fila se houver concorrencia.
-- A anonimizacao atual e baseline de demo, nao garantia produtiva.
-- Audio exige HTTPS e ainda nao possui transcricao automatica nesta versao.
+- Streamlit is still not the ideal front-end for public multi-user testing.
+- Local SQLite requires isolation or ephemeral behavior for multiple testers.
+- Gemma4 may have high latency and queueing under concurrent use.
+- The current anonymization is a demo baseline, not a production guarantee.
+- Audio requires HTTPS and still does not have automatic transcription in this version.
 
-## Como criar esta issue no GitHub
+## How To Create This Issue On GitHub
 
-Depois de reautenticar o GitHub CLI:
+After re-authenticating the GitHub CLI:
 
 ```powershell
 gh auth login -h github.com
-gh issue create --repo HackathonBrTeam/Empathy-Interactional-Expertise --title "Preparar demo publica controlada com VM, Ollama/Gemma4 e Streamlit" --body-file docs/issue_demo_publica_controlada.md
+gh issue create --repo HackathonBrTeam/Empathy-Interactional-Expertise --title "Prepare controlled public demo with VM, Ollama/Gemma4, and Streamlit" --body-file docs/issue_demo_publica_controlada.md
 ```
 
