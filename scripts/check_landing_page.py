@@ -3,6 +3,8 @@ from pathlib import Path
 
 
 LANDING_PATH = Path("landing/index.html")
+SESSION_EXPIRED_PATH = Path("landing/session-expired.html")
+ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
 REQUIRED_VIDEO_IDS = {
     "sA26L7lsu2M",
     "urQLq7XPmMo",
@@ -95,6 +97,18 @@ def main() -> None:
     for language_prefix in ('startsWith("pt")', 'startsWith("es")', 'startsWith("en")'):
         if language_prefix not in source:
             raise SystemExit(f"landing: missing language prefix rule {language_prefix}")
+
+    expired_source = SESSION_EXPIRED_PATH.read_text(encoding="utf-8")
+    if "Session expired" not in expired_source:
+        raise SystemExit("landing: missing session expired page title")
+    if "infrastructure and environmental costs" not in expired_source:
+        raise SystemExit("landing: missing sustainability message")
+    if "detectPreferredLanguage" not in expired_source:
+        raise SystemExit("landing: session expired page missing language detection")
+
+    root_expired_source = ROOT_SESSION_EXPIRED_PATH.read_text(encoding="utf-8")
+    if "landing/session-expired.html" not in root_expired_source:
+        raise SystemExit("landing: root session-expired redirect is missing")
 
     print("landing: ok")
 

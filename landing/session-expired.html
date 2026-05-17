@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session expired | EmpathyAI</title>
+  <meta name="description" content="The EmpathyAI controlled demo session was closed after inactivity to reduce infrastructure and environmental costs.">
+  <style>
+    :root {
+      --teal: #0d7f88;
+      --teal-deep: #0a5960;
+      --coral: #bf4a3d;
+      --ink: #18333b;
+      --muted: #53676f;
+      --line: #d9e8eb;
+      --wash: #f6fbfb;
+      --surface: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(13, 127, 136, 0.1), rgba(191, 74, 61, 0.08)),
+        var(--wash);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      padding: 24px;
+    }
+
+    main {
+      width: min(760px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 18px 44px rgba(24, 51, 59, 0.1);
+      padding: clamp(28px, 6vw, 54px);
+    }
+
+    .language-layer {
+      display: none;
+    }
+
+    .language-layer.is-active {
+      display: block;
+    }
+
+    .language-switcher {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      margin-bottom: 28px;
+    }
+
+    button {
+      min-width: 54px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 750;
+      padding: 7px 11px;
+    }
+
+    button[aria-pressed="true"] {
+      background: var(--teal);
+      color: #ffffff;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid rgba(13, 127, 136, 0.35);
+      outline-offset: 3px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal-deep);
+      font-size: 0.84rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 7vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      margin-top: 28px;
+      border-radius: 8px;
+      background: var(--teal);
+      color: #ffffff;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 11px 16px;
+    }
+
+    .note {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: #5d7077;
+      font-size: 0.96rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="language-switcher" role="group" aria-label="Language">
+      <button type="button" data-language-button="en" aria-pressed="true">EN</button>
+      <button type="button" data-language-button="pt" aria-pressed="false">PT-BR</button>
+      <button type="button" data-language-button="es" aria-pressed="false">ES</button>
+    </div>
+
+    <section class="language-layer is-active" data-language="en" aria-labelledby="expired-title-en">
+      <p class="eyebrow">Controlled demo</p>
+      <h1 id="expired-title-en">Session expired</h1>
+      <p>Your EmpathyAI demo session was closed after a period of inactivity.</p>
+      <p>This helps reduce infrastructure and environmental costs while keeping the controlled demo available on demand.</p>
+      <a class="button" href="./">Relaunch from the landing page</a>
+      <p class="note">This page intentionally ends the Streamlit interaction loop, allowing idle-session shutdown policies to detect zero active sessions.</p>
+    </section>
+
+    <section class="language-layer" data-language="pt" aria-labelledby="expired-title-pt">
+      <p class="eyebrow">Demo controlada</p>
+      <h1 id="expired-title-pt">Sessão expirada</h1>
+      <p>Sua sessão da demo do EmpathyAI foi encerrada após um período de inatividade.</p>
+      <p>Isso ajuda a reduzir custos de infraestrutura e impacto ambiental, mantendo a demo controlada disponível sob demanda.</p>
+      <a class="button" href="./">Reabrir pela landing page</a>
+      <p class="note">Esta página encerra intencionalmente o loop de interação do Streamlit, permitindo que políticas de desligamento por ociosidade detectem zero sessões ativas.</p>
+    </section>
+
+    <section class="language-layer" data-language="es" aria-labelledby="expired-title-es">
+      <p class="eyebrow">Demo controlada</p>
+      <h1 id="expired-title-es">Sesión expirada</h1>
+      <p>Tu sesión de la demo de EmpathyAI se cerró después de un período de inactividad.</p>
+      <p>Esto ayuda a reducir costos de infraestructura e impacto ambiental, manteniendo la demo controlada disponible bajo demanda.</p>
+      <a class="button" href="./">Reabrir desde la landing page</a>
+      <p class="note">Esta página finaliza intencionalmente el ciclo de interacción de Streamlit, permitiendo que las políticas de apagado por inactividad detecten cero sesiones activas.</p>
+    </section>
+  </main>
+
+  <script>
+    const fallbackLanguage = "en";
+    const languageButtons = document.querySelectorAll("[data-language-button]");
+    const layers = document.querySelectorAll("[data-language]");
+
+    function detectPreferredLanguage() {
+      const browserLanguages = navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || navigator.userLanguage || fallbackLanguage];
+
+      for (const browserLanguage of browserLanguages) {
+        const normalized = String(browserLanguage).toLowerCase();
+        if (normalized.startsWith("pt")) {
+          return "pt";
+        }
+        if (normalized.startsWith("es")) {
+          return "es";
+        }
+        if (normalized.startsWith("en")) {
+          return "en";
+        }
+      }
+
+      return fallbackLanguage;
+    }
+
+    function setLanguage(language) {
+      const supportedLanguage = ["en", "pt", "es"].includes(language) ? language : fallbackLanguage;
+      document.documentElement.lang = supportedLanguage === "pt" ? "pt-BR" : supportedLanguage;
+      languageButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.languageButton === supportedLanguage));
+      });
+      layers.forEach((layer) => {
+        layer.classList.toggle("is-active", layer.dataset.language === supportedLanguage);
+      });
+    }
+
+    languageButtons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.languageButton));
+    });
+
+    setLanguage(detectPreferredLanguage());
+  </script>
+</body>
+</html>

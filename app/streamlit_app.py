@@ -289,6 +289,114 @@ except (ValueError, ValidationError) as error:
     st.stop()
 
 
+def render_session_timeout_guard(settings):
+    timeout_ms = settings.session_timeout_ms
+    warning_ms = min(settings.session_timeout_warning_ms, timeout_ms)
+    expired_url = settings.session_expired_url
+
+    components.html(
+        f"""
+        <script>
+          (() => {{
+            const timeoutMs = {json.dumps(timeout_ms)};
+            const warningMs = {json.dumps(warning_ms)};
+            const expiredUrl = {json.dumps(expired_url)};
+            const parentWindow = window.parent;
+            const parentDocument = parentWindow.document;
+            const humanEvents = [
+              "mousemove",
+              "keydown",
+              "click",
+              "scroll",
+              "touchstart",
+              "touchmove"
+            ];
+            let warningTimer = null;
+            let expirationTimer = null;
+            let expired = false;
+
+            function ensureWarning() {{
+              let warning = parentDocument.getElementById("empathy-session-warning");
+              if (warning) {{
+                return warning;
+              }}
+
+              warning = parentDocument.createElement("div");
+              warning.id = "empathy-session-warning";
+              warning.setAttribute("role", "status");
+              warning.setAttribute("aria-live", "polite");
+              warning.textContent = "Session will expire soon due to inactivity. This controlled demo uses automatic session shutdown to minimize infrastructure and environmental costs.";
+              warning.style.cssText = [
+                "position: fixed",
+                "right: 24px",
+                "bottom: 24px",
+                "z-index: 2147483647",
+                "max-width: 420px",
+                "border: 1px solid rgba(13, 127, 136, 0.32)",
+                "border-left: 6px solid #0d7f88",
+                "border-radius: 8px",
+                "background: #ffffff",
+                "color: #18333b",
+                "box-shadow: 0 18px 42px rgba(24, 51, 59, 0.18)",
+                "font: 600 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                "padding: 14px 16px",
+                "display: none"
+              ].join(";");
+              parentDocument.body.appendChild(warning);
+              return warning;
+            }}
+
+            function hideWarning() {{
+              const warning = parentDocument.getElementById("empathy-session-warning");
+              if (warning) {{
+                warning.style.display = "none";
+              }}
+            }}
+
+            function showWarning() {{
+              ensureWarning().style.display = "block";
+            }}
+
+            function expireSession() {{
+              if (expired) {{
+                return;
+              }}
+              expired = true;
+              humanEvents.forEach((eventName) => {{
+                parentDocument.removeEventListener(eventName, resetTimers, true);
+              }});
+              parentWindow.location.replace(expiredUrl);
+            }}
+
+            function resetTimers() {{
+              if (expired) {{
+                return;
+              }}
+              hideWarning();
+              clearTimeout(warningTimer);
+              clearTimeout(expirationTimer);
+              warningTimer = setTimeout(showWarning, warningMs);
+              expirationTimer = setTimeout(expireSession, timeoutMs);
+            }}
+
+            if (!parentWindow.__empathyInactivityTimeoutInstalled) {{
+              parentWindow.__empathyInactivityTimeoutInstalled = true;
+              ensureWarning();
+              humanEvents.forEach((eventName) => {{
+                parentDocument.addEventListener(eventName, resetTimers, true);
+              }});
+              resetTimers();
+            }}
+          }})();
+        </script>
+        """,
+        height=0,
+    )
+
+
+render_session_timeout_guard(settings)
+
+
 def resolve_initial_ui_language() -> str:
     context_locale = detect_language_from_locale(getattr(st.context, "locale", None))
     if context_locale:

@@ -25,6 +25,8 @@ Publish only as a controlled demo, not as an open demo:
 - Run the Gemma4 model through Ollama on the demo server.
 - Keep the UX experience implemented in the `ux-demo-readiness-streamlit` branch.
 - Use ephemeral persistence for the mutual learning diary.
+- Close inactive browser sessions after 3 minutes of no human interaction.
+- Redirect expired users to a friendly session-expired page with sustainability messaging.
 - Ensure the demo is suitable for limited testing, not open production use.
 
 ## Deployment Pending Items
@@ -36,6 +38,9 @@ Publish only as a controlled demo, not as an open demo:
 - [ ] Protect access with authentication or password.
 - [ ] Ensure the Ollama port is not publicly exposed.
 - [ ] Implement an ephemeral diary policy or disable persistence between users.
+- [x] Implement frontend inactivity detection for real human interaction.
+- [x] Redirect inactive sessions to a Session Expired page.
+- [x] Ensure timeout does not depend on Streamlit healthcheck traffic.
 - [ ] Confirm that no raw data is persisted.
 - [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
 - [ ] Document demo start/stop operations.
@@ -52,6 +57,7 @@ Publish only as a controlled demo, not as an open demo:
 - [ ] Manual minimal concurrency test.
 - [ ] Manual HTTPS access test.
 - [ ] Manual Ollama port blocking test.
+- [ ] Manual inactivity timeout test in the public VM environment.
 
 ## Known Risks
 
@@ -69,4 +75,3 @@ After re-authenticating the GitHub CLI:
 gh auth login -h github.com
 gh issue create --repo HackathonBrTeam/Empathy-Interactional-Expertise --title "Prepare controlled public demo with VM, Ollama/Gemma4, and Streamlit" --body-file docs/issue_demo_publica_controlada.md
 ```
-

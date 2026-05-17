@@ -75,6 +75,14 @@ def main() -> None:
 
     if "st.audio_input(" not in source:
         raise SystemExit("ux-a11y: optional audio input is missing from the demo UI")
+    if "render_session_timeout_guard(settings)" not in source:
+        raise SystemExit("ux-a11y: session timeout guard is not rendered")
+    if "mousemove" not in source or "keydown" not in source or "touchstart" not in source:
+        raise SystemExit("ux-a11y: timeout guard must watch human interaction events")
+    if "_stcore/health" in source or "_stcore/stream" in source:
+        raise SystemExit("ux-a11y: timeout guard should not depend on Streamlit health traffic")
+    if "Session will expire soon due to inactivity" not in source:
+        raise SystemExit("ux-a11y: timeout warning copy is missing")
 
     print("ux-a11y: ok")
 
