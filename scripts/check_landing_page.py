@@ -6,7 +6,7 @@ LANDING_PATH = Path("landing/index.html")
 SESSION_EXPIRED_PATH = Path("landing/session-expired.html")
 ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
 LAUNCHER_ENDPOINT = (
-    "https://empathyai-demo-launcher-213729457903.us-central1.run.app/start-demo"
+    "https://empathyai-demo-launcher-nepwxbwava-uc.a.run.app/start-demo"
 )
 REQUIRED_VIDEO_IDS = {
     "sA26L7lsu2M",
