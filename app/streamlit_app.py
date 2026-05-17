@@ -38,8 +38,12 @@ from empathy_engine.use_cases.analyze_interaction import (
 
 st.set_page_config(
     page_title="EmpathyAI Cognitive Mediator",
+    page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="expanded",
+    # The controlled demo is frequently opened from phones during judging/testing.
+    # Starting collapsed keeps Streamlit's sidebar from covering the first screen,
+    # while preserving access through Streamlit's native sidebar toggle.
+    initial_sidebar_state="collapsed",
 )
 
 configure_safe_logging()
@@ -247,35 +251,96 @@ st.markdown(
         }
 
         @media (max-width: 760px) {
+            .stApp {
+                overflow-x: hidden;
+            }
+
             .block-container {
-                padding-left: 1rem;
-                padding-right: 1rem;
+                width: 100%;
+                max-width: 100%;
+                padding-top: 1rem;
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
                 padding-bottom: 5rem;
             }
 
             .empathy-hero {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+                margin-bottom: 1rem;
+                padding-top: 0.75rem;
+                padding-bottom: 1rem;
                 text-align: center;
             }
 
             .empathy-logo-shell img {
-                max-width: 150px;
+                max-width: 120px;
             }
 
             .empathy-subtitle {
                 margin-left: auto;
                 margin-right: auto;
+                font-size: 1rem;
+                line-height: 1.45;
             }
 
             .empathy-band,
+            .empathy-panel,
             .empathy-bridge-card {
                 padding: 0.9rem;
+            }
+
+            .empathy-title {
+                font-size: clamp(2rem, 13vw, 3.1rem);
+            }
+
+            .empathy-section-title {
+                font-size: 1rem;
+                line-height: 1.35;
+            }
+
+            .empathy-step-label {
+                margin-top: 1rem;
+                font-size: 0.78rem;
+            }
+
+            .stTextArea textarea {
+                min-height: 7rem;
+                font-size: 1rem;
+            }
+
+            .stButton > button,
+            .stDownloadButton > button {
+                width: 100%;
+                min-height: 2.85rem;
+                white-space: normal;
+            }
+
+            [data-baseweb="select"] > div {
+                min-height: 2.75rem;
             }
 
             .stButton:has(button[kind="primary"]) {
                 bottom: 0;
                 padding-bottom: 0.75rem;
+            }
+        }
+
+        /* Mobile and tablet users should land directly in the task flow.
+           The sidebar remains available through Streamlit's built-in toggle,
+           but the main content keeps the full viewport width on first load. */
+        @media (max-width: 1024px) {
+            section[data-testid="stSidebar"] {
+                box-shadow: 8px 0 28px rgba(24, 51, 59, 0.12);
+            }
+
+            .block-container {
+                padding-left: max(0.85rem, env(safe-area-inset-left));
+                padding-right: max(0.85rem, env(safe-area-inset-right));
+            }
+
+            div[data-testid="column"] {
+                min-width: 0;
             }
         }
     </style>

@@ -65,6 +65,28 @@ def main() -> None:
 
     if "@media (max-width: 760px)" not in source:
         raise SystemExit("ux-a11y: missing small-screen media query")
+    if 'page_icon="🧠"' not in source:
+        raise SystemExit("ux-a11y: Streamlit page icon is missing")
+    if 'initial_sidebar_state="collapsed"' not in source:
+        raise SystemExit("ux-a11y: sidebar should start collapsed for mobile demo use")
+    if "@media (max-width: 1024px)" not in source:
+        raise SystemExit("ux-a11y: missing tablet responsive media query")
+    for mobile_token in (
+        "overflow-x: hidden",
+        "max-width: 100%",
+        "env(safe-area-inset-left)",
+        ".stButton > button,",
+        "[data-baseweb=\"select\"] > div",
+        "white-space: normal",
+    ):
+        if mobile_token not in source:
+            raise SystemExit(f"ux-a11y: missing mobile responsive token {mobile_token}")
+    for mobile_comment in (
+        "Starting collapsed keeps Streamlit's sidebar from covering the first screen",
+        "Mobile and tablet users should land directly in the task flow",
+    ):
+        if mobile_comment not in source:
+            raise SystemExit(f"ux-a11y: missing mobile rationale comment {mobile_comment}")
 
     for focus_selector in (".stAudioInput:focus-within", ".stButton > button:focus-visible"):
         if focus_selector not in source:
