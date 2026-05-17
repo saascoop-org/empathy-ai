@@ -27,6 +27,8 @@ Publish only as a controlled demo, not as an open demo:
 - Use ephemeral persistence for the mutual learning diary.
 - Close inactive browser sessions after 3 minutes of no human interaction.
 - Redirect expired users to a friendly session-expired page with sustainability messaging.
+- Launch the VM-backed demo from the GitHub Pages landing page through the Cloud Run launcher.
+- Redirect users automatically to the demo URL returned by the launcher API.
 - Ensure the demo is suitable for limited testing, not open production use.
 
 ## Deployment Pending Items
@@ -41,6 +43,9 @@ Publish only as a controlled demo, not as an open demo:
 - [x] Implement frontend inactivity detection for real human interaction.
 - [x] Redirect inactive sessions to a Session Expired page.
 - [x] Ensure timeout does not depend on Streamlit healthcheck traffic.
+- [x] Add landing-page launch flow for the Cloud Run launcher endpoint.
+- [x] Add progressive launch messages, spinner, disabled CTA state, and graceful error state.
+- [x] Redirect automatically to the launcher-provided demo URL.
 - [ ] Confirm that no raw data is persisted.
 - [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
 - [ ] Document demo start/stop operations.
@@ -58,6 +63,8 @@ Publish only as a controlled demo, not as an open demo:
 - [ ] Manual HTTPS access test.
 - [ ] Manual Ollama port blocking test.
 - [ ] Manual inactivity timeout test in the public VM environment.
+- [ ] Manual Cloud Run launcher test.
+- [ ] Manual dynamic redirect test with current VM external IP.
 
 ## Known Risks
 

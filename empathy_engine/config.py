@@ -15,10 +15,7 @@ class AppSettings(BaseModel):
     processing_language: str = "en"
     session_timeout_ms: int = 180_000
     session_timeout_warning_ms: int = 150_000
-    session_expired_url: str = (
-        "https://hackathonbrteam.github.io/"
-        "Empathy-Interactional-Expertise/session-expired.html"
-    )
+    session_expired_url: str = "/session-expired.html"
 
     @field_validator("default_ui_language", "processing_language")
     @classmethod
@@ -70,7 +67,6 @@ def load_settings() -> AppSettings:
         ),
         session_expired_url=os.getenv(
             "SESSION_EXPIRED_URL",
-            "https://hackathonbrteam.github.io/"
-            "Empathy-Interactional-Expertise/session-expired.html",
+            "/session-expired.html",
         ),
     )

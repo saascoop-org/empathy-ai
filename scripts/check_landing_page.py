@@ -5,6 +5,9 @@ from pathlib import Path
 LANDING_PATH = Path("landing/index.html")
 SESSION_EXPIRED_PATH = Path("landing/session-expired.html")
 ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
+LAUNCHER_ENDPOINT = (
+    "https://empathyai-demo-launcher-213729457903.us-central1.run.app/start-demo"
+)
 REQUIRED_VIDEO_IDS = {
     "sA26L7lsu2M",
     "urQLq7XPmMo",
@@ -38,6 +41,7 @@ class LandingParser(HTMLParser):
         self.iframes = []
         self.images = []
         self.links = []
+        self.launch_buttons = 0
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -51,6 +55,8 @@ class LandingParser(HTMLParser):
             self.images.append(attributes.get("src", ""))
         if tag == "a":
             self.links.append(attributes.get("href", ""))
+        if "data-launch-demo" in attributes:
+            self.launch_buttons += 1
 
 
 def main() -> None:
@@ -82,12 +88,33 @@ def main() -> None:
     if missing_screenshots:
         raise SystemExit(f"landing: missing screenshot references: {missing_screenshots}")
 
-    if "Access controlled demo" not in source:
+    if "Launch Controlled Demo" not in source:
         raise SystemExit("landing: missing English CTA")
-    if "Acessar demo controlada" not in source:
+    if "Iniciar demo controlada" not in source:
         raise SystemExit("landing: missing Portuguese CTA")
-    if "Acceder a la demo controlada" not in source:
+    if "Iniciar demo controlada" not in source:
         raise SystemExit("landing: missing Spanish CTA")
+    if parser.launch_buttons != 3:
+        raise SystemExit(f"landing: expected 3 launch buttons, found {parser.launch_buttons}")
+    if LAUNCHER_ENDPOINT not in source:
+        raise SystemExit("landing: missing Cloud Run launcher endpoint")
+    for launch_text in (
+        "Initializing local AI runtime...",
+        "Loading empathy mediation agents...",
+        "Preparing secure controlled session...",
+        "Launching experience...",
+        "automatic session shutdown to minimize infrastructure and environmental costs",
+    ):
+        if launch_text not in source:
+            raise SystemExit(f"landing: missing launch lifecycle text: {launch_text}")
+    for launch_token in (
+        "fetch(launcherEndpoint",
+        "readDemoUrl(payload)",
+        "window.location.assign(demoUrl)",
+        "button.disabled = isDisabled",
+    ):
+        if launch_token not in source:
+            raise SystemExit(f"landing: missing launch behavior token: {launch_token}")
     if "@media (max-width: 860px)" not in source:
         raise SystemExit("landing: missing responsive breakpoint")
     if "function detectPreferredLanguage()" not in source:

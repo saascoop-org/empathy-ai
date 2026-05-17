@@ -91,7 +91,7 @@ DEFAULT_UI_LANGUAGE=en
 PROCESSING_LANGUAGE=en
 SESSION_TIMEOUT_MS=180000
 SESSION_TIMEOUT_WARNING_MS=150000
-SESSION_EXPIRED_URL=https://hackathonbrteam.github.io/Empathy-Interactional-Expertise/session-expired.html
+SESSION_EXPIRED_URL=/session-expired.html
 ```
 
 `gemma4:e2b` is available as a higher-memory target model, but the local demo uses `gemma3:1b` because it fits the available machine memory. If Ollama cannot run the configured model, the app keeps the deterministic multi-agent flow available and falls back to a safe bridge response.
