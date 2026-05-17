@@ -92,6 +92,14 @@ def main() -> None:
         raise SystemExit("ux-a11y: timeout guard should not depend on Streamlit health traffic")
     if "Session will expire soon due to inactivity" not in source:
         raise SystemExit("ux-a11y: timeout warning copy is missing")
+    for token_guard in (
+        "enforce_demo_token_access(settings)",
+        'st.query_params.get("demo_token", "")',
+        "validate_demo_token(",
+        'del st.query_params["demo_token"]',
+    ):
+        if token_guard not in source:
+            raise SystemExit(f"ux-a11y: missing demo token guard: {token_guard}")
 
     print("ux-a11y: ok")
 

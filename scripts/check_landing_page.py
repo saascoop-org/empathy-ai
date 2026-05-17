@@ -111,16 +111,19 @@ def main() -> None:
             raise SystemExit(f"landing: missing launch lifecycle text: {launch_text}")
     for launch_token in (
         "fetch(launcherEndpoint",
-        "applyDemoCredentials(demoUrl, payload)",
+        "readTokenizedDemoUrl(demoUrl, payload)",
         "payload.auth_url || payload.authUrl || payload.authURL",
-        "url.username = username",
-        "url.password = password",
+        "payload.demo_token || payload.demoToken || payload.token",
+        'url.searchParams.set("demo_token", demoToken)',
         "readDemoUrl(payload)",
         "window.location.assign(demoUrl)",
         "button.disabled = isDisabled",
     ):
         if launch_token not in source:
             raise SystemExit(f"landing: missing launch behavior token: {launch_token}")
+    for unsafe_token in ("url.username", "url.password", "payload.password", "credentials.password"):
+        if unsafe_token in source:
+            raise SystemExit(f"landing: must not expose Basic Auth credential handling: {unsafe_token}")
     if "@media (max-width: 860px)" not in source:
         raise SystemExit("landing: missing responsive breakpoint")
     if "function detectPreferredLanguage()" not in source:

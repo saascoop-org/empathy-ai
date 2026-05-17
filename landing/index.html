@@ -964,26 +964,23 @@
       }, 1800);
     }
 
-    function applyDemoCredentials(demoUrl, payload) {
+    function readTokenizedDemoUrl(demoUrl, payload) {
       const authUrl = payload.auth_url || payload.authUrl || payload.authURL;
       if (authUrl) {
         return authUrl;
       }
 
-      const credentials = payload.credentials || payload.auth || {};
-      const username = payload.username || payload.user || credentials.username || credentials.user;
-      const password = payload.password || payload.pass || credentials.password || credentials.pass;
-      if (!username || !password) {
-        return demoUrl;
+      const demoToken = payload.demo_token || payload.demoToken || payload.token;
+      if (!demoToken) {
+        return "";
       }
 
       try {
         const url = new URL(demoUrl);
-        url.username = username;
-        url.password = password;
+        url.searchParams.set("demo_token", demoToken);
         return url.toString();
       } catch (error) {
-        return demoUrl;
+        return "";
       }
     }
 
@@ -993,7 +990,7 @@
         || payload.demoURL
         || payload.url
         || (payload.demo && (payload.demo.url || payload.demo.demo_url || payload.demo.demoUrl));
-      return demoUrl ? applyDemoCredentials(demoUrl, payload) : "";
+      return demoUrl ? readTokenizedDemoUrl(demoUrl, payload) : "";
     }
 
     function describeLauncherState(payload) {

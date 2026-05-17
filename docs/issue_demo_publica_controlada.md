@@ -13,7 +13,8 @@ Publish only as a controlled demo, not as an open demo:
 - VM with enough RAM/VRAM for Gemma4.
 - Ollama and Streamlit running on the same server or private network.
 - HTTPS required.
-- Simple authentication or protected link.
+- Short-lived signed token access for launched sessions.
+- Basic Auth kept only as a manual testing fallback.
 - Ollama port must not be publicly exposed.
 - Ephemeral diary per session, or persistence disabled, to avoid mixing data between testers.
 - Concurrency limit/rate limiting.
@@ -37,7 +38,7 @@ Publish only as a controlled demo, not as an open demo:
 - [ ] Validate `gemma4:e2b` with enough memory on the server.
 - [ ] Configure Ollama on the server and download the model defined in `GEMMA_MODEL`.
 - [ ] Configure Streamlit for public hosting behind proxy/HTTPS.
-- [ ] Protect access with authentication or password.
+- [ ] Protect access with signed demo tokens.
 - [ ] Ensure the Ollama port is not publicly exposed.
 - [ ] Implement an ephemeral diary policy or disable persistence between users.
 - [x] Implement frontend inactivity detection for real human interaction.
@@ -47,7 +48,10 @@ Publish only as a controlled demo, not as an open demo:
 - [x] Add progressive launch messages, spinner, disabled CTA state, and graceful error state.
 - [x] Redirect automatically to the launcher-provided demo URL.
 - [ ] Configure the Cloud Run launcher CORS response for the GitHub Pages origin.
-- [x] Support launcher-provided `auth_url` or temporary credentials for browser Basic Auth autofill.
+- [x] Support launcher-provided `auth_url` containing a short-lived signed `demo_token`.
+- [x] Remove browser-side support for username/password forwarding.
+- [x] Add reusable HMAC demo token generation and validation helpers.
+- [x] Add optional Streamlit validation through `DEMO_TOKEN_SECRET`.
 - [ ] Confirm that no raw data is persisted.
 - [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
 - [ ] Document demo start/stop operations.
@@ -90,29 +94,33 @@ The endpoint should keep returning JSON with the current VM URL, for example:
 }
 ```
 
-## Authentication Autofill Contract
+## Token-Based Access Contract
 
-Do not hardcode demo credentials in the GitHub Pages landing page. If Basic Auth autofill is required for the controlled demo, the Cloud Run launcher should return either an already prepared authenticated URL:
+Do not hardcode demo credentials in the GitHub Pages landing page. Do not return username/password from Cloud Run. Do not use `user:password@host` URLs.
 
-```json
-{
-  "status": "running",
-  "auth_url": "https://temporary-user:temporary-password@<current-vm-host>"
-}
-```
-
-or return temporary credentials alongside the URL:
+The Cloud Run launcher should start the VM, create a short-lived signed token, and return:
 
 ```json
 {
   "status": "running",
   "url": "https://<current-vm-host>",
-  "username": "temporary-user",
-  "password": "temporary-password"
+  "auth_url": "https://<current-vm-host>/?demo_token=<signed-token>",
+  "expires_in": 300
 }
 ```
 
-The landing page will use these values only from the launcher response and will not store them in the static repository.
+Token requirements:
+
+- Expires after 5 minutes.
+- Includes issued timestamp (`iat`).
+- Includes expiration timestamp (`exp`).
+- Includes a random nonce.
+- Is signed with HMAC-SHA256 using a server-side secret.
+- Never exposes the signing secret to the frontend.
+
+The landing page only redirects to `auth_url` or appends a returned `demo_token` to `url`. It does not handle or store Basic Auth credentials.
+
+The Streamlit app can validate tokens directly when `DEMO_TOKEN_SECRET` is configured. Nginx may also validate the token before proxying traffic, using the same token contract. Basic Auth should remain available only for manual operator testing.
 
 ## Known Risks
 

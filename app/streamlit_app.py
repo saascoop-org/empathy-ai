@@ -29,6 +29,7 @@ from empathy_engine.presentation.learning_diary import (
 )
 from empathy_engine.presentation.result_presenter import ResultPresenter
 from empathy_engine.safety.logging import configure_safe_logging
+from empathy_engine.security.demo_token import DemoTokenError, validate_demo_token
 from empathy_engine.storage.interaction_store import InteractionStore
 from empathy_engine.use_cases.analyze_interaction import (
     AnalyzeInteractionCommand,
@@ -287,6 +288,34 @@ try:
 except (ValueError, ValidationError) as error:
     st.error(f"Invalid application configuration: {error}")
     st.stop()
+
+
+def enforce_demo_token_access(settings):
+    if not settings.demo_token_secret:
+        return
+    if st.session_state.get("demo_token_validated"):
+        return
+
+    token = st.query_params.get("demo_token", "")
+    try:
+        validate_demo_token(
+            token,
+            settings.demo_token_secret,
+            max_ttl_seconds=settings.demo_token_ttl_seconds,
+        )
+    except DemoTokenError:
+        st.error(
+            "This controlled demo link is missing, expired, or invalid. "
+            "Please relaunch the demo from the landing page."
+        )
+        st.stop()
+
+    st.session_state["demo_token_validated"] = True
+    if "demo_token" in st.query_params:
+        del st.query_params["demo_token"]
+
+
+enforce_demo_token_access(settings)
 
 
 def render_session_timeout_guard(settings):

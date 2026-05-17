@@ -16,6 +16,8 @@ class AppSettings(BaseModel):
     session_timeout_ms: int = 180_000
     session_timeout_warning_ms: int = 150_000
     session_expired_url: str = "/session-expired.html"
+    demo_token_secret: str = ""
+    demo_token_ttl_seconds: int = 300
 
     @field_validator("default_ui_language", "processing_language")
     @classmethod
@@ -41,6 +43,13 @@ class AppSettings(BaseModel):
     def validate_positive_timeout(cls, value):
         if value <= 0:
             raise ValueError("Session timeout values must be positive")
+        return value
+
+    @field_validator("demo_token_ttl_seconds")
+    @classmethod
+    def validate_demo_token_ttl(cls, value):
+        if value <= 0:
+            raise ValueError("DEMO_TOKEN_TTL_SECONDS must be positive")
         return value
 
     @field_validator("session_expired_url")
@@ -69,4 +78,6 @@ def load_settings() -> AppSettings:
             "SESSION_EXPIRED_URL",
             "/session-expired.html",
         ),
+        demo_token_secret=os.getenv("DEMO_TOKEN_SECRET", ""),
+        demo_token_ttl_seconds=int(os.getenv("DEMO_TOKEN_TTL_SECONDS", "300")),
     )

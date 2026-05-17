@@ -63,7 +63,7 @@ The page should support the next deployment step: a protected public demo using 
 - [x] Page includes a visible CTA for the controlled demo.
 - [x] Controlled demo CTA calls the Cloud Run launcher endpoint.
 - [x] CTA shows progressive launch feedback, disabled state, spinner, and error handling.
-- [x] CTA supports launcher-provided `auth_url` or temporary credentials for Basic Auth autofill.
+- [x] CTA supports launcher-provided signed `auth_url` or `demo_token`.
 - [x] Page includes responsible-use/privacy note.
 - [x] Page is responsive on desktop and mobile widths.
 - [x] Page avoids placeholder-only content.
