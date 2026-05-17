@@ -88,6 +88,13 @@ def main() -> None:
         raise SystemExit("landing: missing Spanish CTA")
     if "@media (max-width: 860px)" not in source:
         raise SystemExit("landing: missing responsive breakpoint")
+    if "function detectPreferredLanguage()" not in source:
+        raise SystemExit("landing: missing browser language detection")
+    if 'const fallbackLanguage = "en";' not in source:
+        raise SystemExit("landing: missing explicit English fallback")
+    for language_prefix in ('startsWith("pt")', 'startsWith("es")', 'startsWith("en")'):
+        if language_prefix not in source:
+            raise SystemExit(f"landing: missing language prefix rule {language_prefix}")
 
     print("landing: ok")
 

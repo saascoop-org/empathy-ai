@@ -747,20 +747,45 @@
   <script>
     const languageButtons = document.querySelectorAll("[data-language-button]");
     const layers = document.querySelectorAll("[data-language]");
+    const fallbackLanguage = "en";
+
+    function detectPreferredLanguage() {
+      const browserLanguages = navigator.languages && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || navigator.userLanguage || fallbackLanguage];
+
+      for (const browserLanguage of browserLanguages) {
+        const normalized = String(browserLanguage).toLowerCase();
+        if (normalized.startsWith("pt")) {
+          return "pt";
+        }
+        if (normalized.startsWith("es")) {
+          return "es";
+        }
+        if (normalized.startsWith("en")) {
+          return "en";
+        }
+      }
+
+      return fallbackLanguage;
+    }
 
     function setLanguage(language) {
-      document.documentElement.lang = language === "pt" ? "pt-BR" : language;
+      const supportedLanguage = ["en", "pt", "es"].includes(language) ? language : fallbackLanguage;
+      document.documentElement.lang = supportedLanguage === "pt" ? "pt-BR" : supportedLanguage;
       languageButtons.forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.languageButton === language));
+        button.setAttribute("aria-pressed", String(button.dataset.languageButton === supportedLanguage));
       });
       layers.forEach((layer) => {
-        layer.classList.toggle("is-active", layer.dataset.language === language);
+        layer.classList.toggle("is-active", layer.dataset.language === supportedLanguage);
       });
     }
 
     languageButtons.forEach((button) => {
       button.addEventListener("click", () => setLanguage(button.dataset.languageButton));
     });
+
+    setLanguage(detectPreferredLanguage());
   </script>
 </body>
 </html>
