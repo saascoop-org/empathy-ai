@@ -390,9 +390,9 @@ enforce_demo_token_access(settings)
 
 
 def render_session_timeout_guard(settings):
-    timeout_ms = settings.session_timeout_ms
-    warning_ms = min(settings.session_timeout_warning_ms, timeout_ms)
-    expired_url = settings.session_expired_url
+    timeout_ms = getattr(settings, "session_timeout_ms", 180_000)
+    warning_ms = min(getattr(settings, "session_timeout_warning_ms", 150_000), timeout_ms)
+    expired_url = getattr(settings, "session_expired_url", "/session-expired.html")
 
     components.html(
         f"""
