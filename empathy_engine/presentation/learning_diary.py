@@ -108,7 +108,7 @@ def _clean_anonymized_display(text: str) -> str:
 def _summarize_interaction(interaction: str) -> str:
     text = " ".join((interaction or "").split())
     if not text:
-        return "Registro do diario"
+        return "Registro do diário"
 
     text = re.sub(r"^\[PERSON\]\s+", "", text, flags=re.IGNORECASE)
     max_length = 64

@@ -24,3 +24,13 @@ def test_demo_scenarios_exist_for_supported_languages():
             assert label == scenario["label"]
             assert REQUIRED_FIELDS <= set(scenario)
             assert all(scenario[field] for field in REQUIRED_FIELDS)
+
+
+def test_pt_br_demo_scenarios_use_accented_copy():
+    scenario = get_demo_scenario("project_clarity", "pt-BR")
+
+    assert scenario["label"] == "Projeto com informações confusas"
+    assert "informações organizadas" in scenario["user_profile"]
+    assert "pressão" in scenario["other_profile"]
+    assert "responsáveis" in scenario["repair_supports"]
+    assert "está passando informações" in scenario["interaction"]

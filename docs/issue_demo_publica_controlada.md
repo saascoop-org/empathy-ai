@@ -52,6 +52,8 @@ Publish only as a controlled demo, not as an open demo:
 - [x] Remove browser-side support for username/password forwarding.
 - [x] Add reusable HMAC demo token generation and validation helpers.
 - [x] Add optional Streamlit validation through `DEMO_TOKEN_SECRET`.
+- [x] Add reference Nginx config for tokenized public demo access without Basic Auth on `/`.
+- [ ] Apply the tokenized Nginx config on the VM and disable any default Basic Auth public route.
 - [ ] Confirm that no raw data is persisted.
 - [ ] Define automatic cleanup for `data/interactions.sqlite3` or temporary storage.
 - [ ] Document demo start/stop operations.
@@ -121,6 +123,11 @@ Token requirements:
 The landing page only redirects to `auth_url` or appends a returned `demo_token` to `url`. It does not handle or store Basic Auth credentials.
 
 The Streamlit app can validate tokens directly when `DEMO_TOKEN_SECRET` is configured. Nginx may also validate the token before proxying traffic, using the same token contract. Basic Auth should remain available only for manual operator testing.
+
+Important deployment note: Nginx Basic Auth must not be enabled on the public `/`
+location used by the landing page. If Basic Auth runs there, the browser prompts
+for username/password before Streamlit receives `?demo_token=...`. Use
+`deploy/nginx/empathyai-demo-token.conf` as the reference public proxy config.
 
 ## Known Risks
 
