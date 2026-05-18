@@ -356,10 +356,13 @@ except (ValueError, ValidationError) as error:
 
 
 def enforce_demo_token_access(settings):
-    if not settings.demo_token_secret and "demo_token" in st.query_params:
+    demo_token_secret = getattr(settings, "demo_token_secret", "")
+    demo_token_ttl_seconds = getattr(settings, "demo_token_ttl_seconds", 300)
+
+    if not demo_token_secret and "demo_token" in st.query_params:
         del st.query_params["demo_token"]
         return
-    if not settings.demo_token_secret:
+    if not demo_token_secret:
         return
     if st.session_state.get("demo_token_validated"):
         return
@@ -368,8 +371,8 @@ def enforce_demo_token_access(settings):
     try:
         validate_demo_token(
             token,
-            settings.demo_token_secret,
-            max_ttl_seconds=settings.demo_token_ttl_seconds,
+            demo_token_secret,
+            max_ttl_seconds=demo_token_ttl_seconds,
         )
     except DemoTokenError:
         st.error(
