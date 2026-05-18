@@ -195,6 +195,9 @@ Compute Engine:
 - Do not expose the demo password in JSON, JavaScript, browser history, or logs.
 - Do not expose the token signing secret to the frontend.
 - Keep Basic Auth only as a manual fallback for operators.
+- Do not enable Nginx `auth_basic` on the public `/` route used by GitHub Pages.
+  If Basic Auth is applied there, browsers ask for username/password before
+  Streamlit can validate `?demo_token=...`.
 - Do not expose Ollama publicly.
 - Prefer HTTPS for the VM demo URL before broader testing.
 - Avoid logging raw `demo_token` values in Nginx, Streamlit, or Cloud Run logs where possible.
@@ -219,6 +222,8 @@ Compute Engine:
 - [ ] Confirm `DEMO_TOKEN_SECRET` is configured consistently in Cloud Run and Streamlit.
 - [ ] Confirm `DEMO_TOKEN_SECRET` is stored in Secret Manager, not only as a raw Cloud Run environment variable.
 - [ ] Confirm launcher returns `auth_url` with `demo_token`.
+- [ ] Confirm Nginx public route uses `deploy/nginx/empathyai-demo-token.conf` or equivalent.
+- [ ] Confirm Nginx public route does not require Basic Auth before proxying to Streamlit.
 - [ ] Confirm landing uses the canonical launcher URL.
 - [ ] Configure HTTPS for the VM demo URL.
 - [ ] Restrict or remove public SSH/RDP firewall rules if not needed.
@@ -228,6 +233,42 @@ Compute Engine:
 - [ ] Confirm Ollama port is not public.
 - [ ] Confirm the inactivity timeout expires the session after 3 minutes.
 - [ ] Confirm the VM shuts down after no active sessions remain.
+
+## Nginx Tokenized Demo Proxy
+
+The public VM route must allow the tokenized request to reach Streamlit:
+
+```text
+https://<demo-host>/?demo_token=<signed-token>
+```
+
+Use `deploy/nginx/empathyai-demo-token.conf` as the reference Nginx config. It
+keeps the public Streamlit route free of Basic Auth and lets the app validate
+`DEMO_TOKEN_SECRET`.
+
+Example VM deployment commands:
+
+```bash
+sudo mkdir -p /var/www/empathyai
+sudo cp session-expired.html /var/www/empathyai/session-expired.html
+sudo cp deploy/nginx/empathyai-demo-token.conf /etc/nginx/sites-available/empathyai-demo
+sudo ln -sf /etc/nginx/sites-available/empathyai-demo /etc/nginx/sites-enabled/empathyai-demo
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+If `/etc/nginx/sites-enabled/default` still contains `auth_basic` on `/`, remove
+or disable that default site before testing from another device:
+
+```bash
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Manual Basic Auth should stay outside the public tokenized flow. The reference
+fallback file `deploy/nginx/empathyai-basic-auth-fallback.conf.example` is an
+operator-only example and must not replace the tokenized public route.
 
 ### After Demo
 

@@ -38,8 +38,12 @@ from empathy_engine.use_cases.analyze_interaction import (
 
 st.set_page_config(
     page_title="EmpathyAI Cognitive Mediator",
+    page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="expanded",
+    # The controlled demo is frequently opened from phones during judging/testing.
+    # Starting collapsed keeps Streamlit's sidebar from covering the first screen,
+    # while preserving access through Streamlit's native sidebar toggle.
+    initial_sidebar_state="collapsed",
 )
 
 configure_safe_logging()
@@ -247,35 +251,96 @@ st.markdown(
         }
 
         @media (max-width: 760px) {
+            .stApp {
+                overflow-x: hidden;
+            }
+
             .block-container {
-                padding-left: 1rem;
-                padding-right: 1rem;
+                width: 100%;
+                max-width: 100%;
+                padding-top: 1rem;
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
                 padding-bottom: 5rem;
             }
 
             .empathy-hero {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+                margin-bottom: 1rem;
+                padding-top: 0.75rem;
+                padding-bottom: 1rem;
                 text-align: center;
             }
 
             .empathy-logo-shell img {
-                max-width: 150px;
+                max-width: 120px;
             }
 
             .empathy-subtitle {
                 margin-left: auto;
                 margin-right: auto;
+                font-size: 1rem;
+                line-height: 1.45;
             }
 
             .empathy-band,
+            .empathy-panel,
             .empathy-bridge-card {
                 padding: 0.9rem;
+            }
+
+            .empathy-title {
+                font-size: clamp(2rem, 13vw, 3.1rem);
+            }
+
+            .empathy-section-title {
+                font-size: 1rem;
+                line-height: 1.35;
+            }
+
+            .empathy-step-label {
+                margin-top: 1rem;
+                font-size: 0.78rem;
+            }
+
+            .stTextArea textarea {
+                min-height: 7rem;
+                font-size: 1rem;
+            }
+
+            .stButton > button,
+            .stDownloadButton > button {
+                width: 100%;
+                min-height: 2.85rem;
+                white-space: normal;
+            }
+
+            [data-baseweb="select"] > div {
+                min-height: 2.75rem;
             }
 
             .stButton:has(button[kind="primary"]) {
                 bottom: 0;
                 padding-bottom: 0.75rem;
+            }
+        }
+
+        /* Mobile and tablet users should land directly in the task flow.
+           The sidebar remains available through Streamlit's built-in toggle,
+           but the main content keeps the full viewport width on first load. */
+        @media (max-width: 1024px) {
+            section[data-testid="stSidebar"] {
+                box-shadow: 8px 0 28px rgba(24, 51, 59, 0.12);
+            }
+
+            .block-container {
+                padding-left: max(0.85rem, env(safe-area-inset-left));
+                padding-right: max(0.85rem, env(safe-area-inset-right));
+            }
+
+            div[data-testid="column"] {
+                min-width: 0;
             }
         }
     </style>
@@ -291,10 +356,13 @@ except (ValueError, ValidationError) as error:
 
 
 def enforce_demo_token_access(settings):
-    if not settings.demo_token_secret and "demo_token" in st.query_params:
+    demo_token_secret = getattr(settings, "demo_token_secret", "")
+    demo_token_ttl_seconds = getattr(settings, "demo_token_ttl_seconds", 300)
+
+    if not demo_token_secret and "demo_token" in st.query_params:
         del st.query_params["demo_token"]
         return
-    if not settings.demo_token_secret:
+    if not demo_token_secret:
         return
     if st.session_state.get("demo_token_validated"):
         return
@@ -303,8 +371,8 @@ def enforce_demo_token_access(settings):
     try:
         validate_demo_token(
             token,
-            settings.demo_token_secret,
-            max_ttl_seconds=settings.demo_token_ttl_seconds,
+            demo_token_secret,
+            max_ttl_seconds=demo_token_ttl_seconds,
         )
     except DemoTokenError:
         st.error(
@@ -322,9 +390,9 @@ enforce_demo_token_access(settings)
 
 
 def render_session_timeout_guard(settings):
-    timeout_ms = settings.session_timeout_ms
-    warning_ms = min(settings.session_timeout_warning_ms, timeout_ms)
-    expired_url = settings.session_expired_url
+    timeout_ms = getattr(settings, "session_timeout_ms", 180_000)
+    warning_ms = min(getattr(settings, "session_timeout_warning_ms", 150_000), timeout_ms)
+    expired_url = getattr(settings, "session_expired_url", "/session-expired.html")
 
     components.html(
         f"""
@@ -501,15 +569,26 @@ def resolve_initial_ui_language() -> str:
 
 
 initial_language = resolve_initial_ui_language()
+st.session_state.setdefault("selected_ui_language", initial_language)
 
-selected_language = st.sidebar.selectbox(
-    translate(initial_language, "ui_language"),
-    SUPPORTED_UI_LANGUAGES,
-    index=SUPPORTED_UI_LANGUAGES.index(initial_language),
-    format_func=lambda language: LANGUAGE_LABELS[language],
-)
+selected_language = st.session_state["selected_ui_language"]
+t = lambda key: translate(selected_language, key)
+
+language_columns = st.columns([0.68, 0.32], vertical_alignment="center")
+with language_columns[1]:
+    # The sidebar starts collapsed for mobile, so language switching must stay
+    # visible in the main flow for multilingual demo testers.
+    selected_language = st.selectbox(
+        t("ui_language"),
+        SUPPORTED_UI_LANGUAGES,
+        index=SUPPORTED_UI_LANGUAGES.index(selected_language),
+        format_func=lambda language: LANGUAGE_LABELS[language],
+        key="selected_ui_language",
+        label_visibility="visible",
+    )
 
 t = lambda key: translate(selected_language, key)
+
 store = InteractionStore()
 presenter = ResultPresenter()
 
@@ -651,14 +730,6 @@ def render_learning_diary():
         st.info(t("learning_diary_empty"))
 
 
-with st.sidebar.expander(t("local_status"), expanded=False):
-    status = get_local_runtime_status(settings)
-    ollama_status = t("status_available") if status.ollama_available else t("status_unavailable")
-    st.text(f"{t('status_model')}: {status.model}")
-    st.text(f"Ollama: {ollama_status}")
-    st.text(f"{t('status_processing_language')}: {status.processing_language}")
-    st.text(f"{t('status_database')}: {status.database_path}")
-
 st.markdown(
     f"""
     <div class="empathy-kicker">{t("product_kicker")}</div>
@@ -678,6 +749,14 @@ st.markdown(
 )
 
 st.info(t("notice"))
+
+with st.expander(t("local_status"), expanded=False):
+    status = get_local_runtime_status(settings)
+    ollama_status = t("status_available") if status.ollama_available else t("status_unavailable")
+    st.text(f"{t('status_model')}: {status.model}")
+    st.text(f"Ollama: {ollama_status}")
+    st.text(f"{t('status_processing_language')}: {status.processing_language}")
+    st.text(f"{t('status_database')}: {status.database_path}")
 
 st.markdown(
     f'<div class="empathy-section-title">{t("demo_scenario_heading")}</div>',

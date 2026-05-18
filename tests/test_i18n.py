@@ -65,6 +65,16 @@ def test_translation_coverage_and_fallback_to_english():
         TRANSLATIONS["es"]["analyze"] = removed
 
 
+def test_pt_br_interface_uses_accented_copy():
+    assert translate("pt-BR", "demo_scenario_heading") == "Cenário de demo"
+    assert translate("pt-BR", "demo_scenario_select") == "Cenário"
+    assert translate("pt-BR", "alterity_user_profile") == "Seu perfil de comunicação"
+    assert translate("pt-BR", "step_context_factors") == "Etapa 3 - Situação e apoios"
+    assert translate("pt-BR", "audio_input_label") == "Desabafar via áudio"
+    assert translate("pt-BR", "learning_diary_search") == "Buscar no diário"
+    assert translate("pt-BR", "save_to_diary_heading") == "Diário e feedback"
+
+
 def test_output_language_validation():
     assert is_likely_language("Aclara la intención y pregunta qué ayudaría.", "es")
     assert is_likely_language("Esclareça a intenção e pergunte o que ajudaria.", "pt-BR")
@@ -91,9 +101,9 @@ def test_localize_workflow_result_translates_dynamic_project_context():
 
     localized = localize_workflow_result(result, "pt-BR")
 
-    assert "informacoes de projeto" in localized["context"]["interaction_summary"]
+    assert "informações de projeto" in localized["context"]["interaction_summary"]
     assert "detalhes do projeto" in localized["translation"]["translation_for_user"]
-    assert "Qual informacao do projeto" in localized["learning"]["reflection_question"]
+    assert "Qual informação do projeto" in localized["learning"]["reflection_question"]
 
 
 def test_app_settings_normalizes_languages():

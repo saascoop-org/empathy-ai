@@ -4,13 +4,13 @@ from empathy_engine.i18n.language import normalize_language
 DEMO_SCENARIOS = {
     "project_clarity": {
         "pt-BR": {
-            "label": "Projeto com informacoes confusas",
-            "user_profile": "Costumo ser direto e preciso de informacoes organizadas para agir.",
-            "other_profile": "A outra pessoa pode estar respondendo sob pressao e sem perceber que faltam detalhes.",
-            "context_factors": "Projeto atrasado, mensagens fragmentadas e expectativa de resposta rapida.",
-            "repair_supports": "Pedir prioridades, responsaveis, prazo e proximo passo em uma lista curta.",
+            "label": "Projeto com informações confusas",
+            "user_profile": "Costumo ser direto e preciso de informações organizadas para agir.",
+            "other_profile": "A outra pessoa pode estar respondendo sob pressão e sem perceber que faltam detalhes.",
+            "context_factors": "Projeto atrasado, mensagens fragmentadas e expectativa de resposta rápida.",
+            "repair_supports": "Pedir prioridades, responsáveis, prazo e próximo passo em uma lista curta.",
             "interaction": (
-                "Minha colega de trabalho esta passando informacoes sobre o projeto "
+                "Minha colega de trabalho está passando informações sobre o projeto "
                 "de forma confusa e desorganizada."
             ),
         },
@@ -42,11 +42,11 @@ DEMO_SCENARIOS = {
             "label": "Mensagem curta interpretada como grosseria",
             "user_profile": "Costumo escrever mensagens curtas para ser objetivo.",
             "other_profile": "A outra pessoa pode esperar mais contexto ou sinais de acolhimento.",
-            "context_factors": "Reuniao atrasada, pouco tempo e conversa por texto sem tom de voz.",
-            "repair_supports": "Explicar a intencao e perguntar qual formato de mensagem ajuda mais.",
+            "context_factors": "Reunião atrasada, pouco tempo e conversa por texto sem tom de voz.",
+            "repair_supports": "Explicar a intenção e perguntar qual formato de mensagem ajuda mais.",
             "interaction": (
                 "Meu colega achou minha mensagem curta grosseira, mas eu estava "
-                "tentando ser claro porque a reuniao estava atrasada."
+                "tentando ser claro porque a reunião estava atrasada."
             ),
         },
         "en": {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EmpathyAI | Cognitive communication mediator</title>
+  <title>EmpathyAI | Cognitive Communication Mediator</title>
   <meta name="description" content="EmpathyAI helps turn communication friction into safer, clearer bridges of understanding with local-first AI mediation.">
   <style>
     :root {
@@ -76,16 +76,18 @@
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: 800;
       letter-spacing: 0;
       text-decoration: none;
     }
 
     .brand img {
-      width: 34px;
-      height: 34px;
+      display: block;
+      width: 42px;
+      height: 42px;
       object-fit: contain;
+      object-position: center;
     }
 
     .language-switcher {
@@ -124,7 +126,7 @@
       border-bottom: 1px solid var(--line);
       background-image:
         linear-gradient(90deg, rgba(246, 251, 251, 0.98), rgba(246, 251, 251, 0.84) 56%, rgba(246, 251, 251, 0.48)),
-        url("../images/EmpathyAI_logo.png");
+        url("../images/EmpathyAI_logo_mark.png");
       background-repeat: no-repeat;
       background-position: right 8vw center;
       background-size: min(48vw, 520px);
@@ -291,6 +293,10 @@
       margin: 0 auto;
     }
 
+    .interface-section .section-inner {
+      width: min(1360px, calc(100% - 32px));
+    }
+
     .section-heading {
       max-width: 780px;
       margin-bottom: 28px;
@@ -386,17 +392,18 @@
       background: #0e242b;
     }
 
-    .video-frame iframe {
+    .video-frame video {
       display: block;
       width: 100%;
       height: 100%;
       border: 0;
+      object-fit: cover;
     }
 
     .screenshot-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 22px;
     }
 
     .screenshot-card {
@@ -404,7 +411,21 @@
       border-radius: 8px;
       overflow: hidden;
       background: var(--surface);
-      box-shadow: 0 14px 34px rgba(24, 51, 59, 0.06);
+      box-shadow: 0 18px 42px rgba(24, 51, 59, 0.08);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .screenshot-card:hover,
+    .screenshot-card:focus-within {
+      border-color: rgba(13, 127, 136, 0.42);
+      box-shadow: 0 24px 58px rgba(24, 51, 59, 0.13);
+      transform: translateY(-2px);
+    }
+
+    .screenshot-link {
+      display: block;
+      background: #f8fcfc;
+      cursor: zoom-in;
     }
 
     .screenshot-card img {
@@ -497,7 +518,7 @@
   <header class="site-header">
     <nav class="nav" aria-label="Primary">
       <a class="brand" href="#top">
-        <img src="../images/EmpathyAI_logo.png" alt="">
+        <img src="../images/EmpathyAI_logo_mark.png" alt="">
         <span>EmpathyAI</span>
       </a>
       <div class="language-switcher" role="group" aria-label="Language">
@@ -512,7 +533,7 @@
     <article class="language-layer is-active" data-language="en">
       <section class="hero" aria-labelledby="hero-title-en">
         <div class="hero-inner">
-          <p class="eyebrow">AI-assisted communication mediation</p>
+          <p class="eyebrow">AI-Assisted Communication Mediation</p>
           <h1 id="hero-title-en">EmpathyAI</h1>
           <p class="hero-copy">Turn communication friction into a safer, clearer bridge of understanding, with local-first AI support and explicit privacy controls.</p>
           <div class="hero-actions">
@@ -526,14 +547,14 @@
       <section aria-labelledby="flow-title-en">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="flow-title-en">How the mediation flow works</h2>
+            <h2 id="flow-title-en">How The Mediation Flow Works</h2>
             <p>EmpathyAI keeps the user in control while helping reframe misunderstandings into usable communication.</p>
           </div>
           <div class="steps">
-            <div class="step"><span class="step-number">1</span><h3>Describe the exchange</h3><p>Share the interaction without needing to decide who is right or wrong.</p></div>
-            <div class="step"><span class="step-number">2</span><h3>Map context</h3><p>Add optional alterity notes about both communication profiles and the situation.</p></div>
-            <div class="step"><span class="step-number">3</span><h3>Review the bridge</h3><p>Get a concise, non-diagnostic suggestion that can be copied and adapted.</p></div>
-            <div class="step"><span class="step-number">4</span><h3>Learn over time</h3><p>Save consented anonymized records in a mutual learning diary.</p></div>
+            <div class="step"><span class="step-number">1</span><h3>Describe The Exchange</h3><p>Share the interaction without needing to decide who is right or wrong.</p></div>
+            <div class="step"><span class="step-number">2</span><h3>Map Context</h3><p>Add optional alterity notes about both communication profiles and the situation.</p></div>
+            <div class="step"><span class="step-number">3</span><h3>Review The Bridge</h3><p>Get a concise, non-diagnostic suggestion that can be copied and adapted.</p></div>
+            <div class="step"><span class="step-number">4</span><h3>Learn Over Time</h3><p>Save consented anonymized records in a mutual learning diary.</p></div>
           </div>
         </div>
       </section>
@@ -541,39 +562,47 @@
       <section aria-labelledby="capabilities-title-en">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="capabilities-title-en">Built for safer communication support</h2>
+            <h2 id="capabilities-title-en">Built For Safer Communication Support</h2>
             <p>The product focuses on clarity, perspective-taking, and privacy boundaries instead of diagnosis or blame.</p>
           </div>
           <div class="capability-grid">
             <div class="capability"><h3>Alterity Map</h3><p>Capture context from both sides before analysis.</p></div>
-            <div class="capability"><h3>Suggested bridge</h3><p>Generate a practical sentence for repairing the exchange.</p></div>
-            <div class="capability"><h3>Local-first controls</h3><p>Keep processing and storage aligned with demo privacy boundaries.</p></div>
-            <div class="capability"><h3>Mutual learning diary</h3><p>Review consented anonymized records and reflection questions.</p></div>
+            <div class="capability"><h3>Suggested Bridge</h3><p>Generate a practical sentence for repairing the exchange.</p></div>
+            <div class="capability"><h3>Local-First Controls</h3><p>Keep processing and storage aligned with demo privacy boundaries.</p></div>
+            <div class="capability"><h3>Mutual Learning Diary</h3><p>Review consented anonymized records and reflection questions.</p></div>
           </div>
         </div>
       </section>
 
-      <section id="interface-en" aria-labelledby="interface-title-en">
+      <section id="interface-en" class="interface-section" aria-labelledby="interface-title-en">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="interface-title-en">Interface preview</h2>
+            <h2 id="interface-title-en">Interface Preview</h2>
             <p>See the English demo flow, from the guided form to the localized result and diary.</p>
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-1.png" alt="English EmpathyAI interface showing the main form and alterity map fields." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-1.png" alt="English EmpathyAI interface showing the main form and alterity map fields." loading="lazy">
+              </a>
               <figcaption>Main analysis flow with visible context fields.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-2.png" alt="English EmpathyAI interface showing feedback, privacy controls, and the analysis action." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-2.png" alt="English EmpathyAI interface showing feedback, privacy controls, and the analysis action." loading="lazy">
+              </a>
               <figcaption>Consent, response feedback, and analysis action.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-3.png" alt="English EmpathyAI result screen showing suggested bridge and explanatory sections." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-3.png" alt="English EmpathyAI result screen showing suggested bridge and explanatory sections." loading="lazy">
+              </a>
               <figcaption>Suggested bridge highlighted as the primary result.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-4.png" alt="English EmpathyAI diary showing saved anonymized learning records." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-4.png" alt="English EmpathyAI diary showing saved anonymized learning records." loading="lazy">
+              </a>
               <figcaption>Mutual learning diary with consented local records.</figcaption>
             </figure>
           </div>
@@ -583,19 +612,27 @@
       <section id="videos-en" aria-labelledby="videos-title-en">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="videos-title-en">Watch the pitch and project walkthrough</h2>
+            <h2 id="videos-title-en">Watch The Pitch And Project Walkthrough</h2>
             <p>Two short videos introduce the product value and the current implementation.</p>
           </div>
           <div class="media-grid">
             <div class="video-panel">
               <h3>Pitch</h3>
               <p>A concise overview of the opportunity and value proposition.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/urQLq7XPmMo" title="EmpathyAI pitch in English" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="EmpathyAI pitch in English">
+                  <source src="../videos/EmpathyAI_pitch_EN.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
             <div class="video-panel">
               <h3>Project</h3>
               <p>A walkthrough of the product concept and implementation.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/msrbxW9grXk" title="EmpathyAI project in English" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="EmpathyAI project in English">
+                  <source src="../videos/EmpathyAI_project_EN.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
           </div>
         </div>
@@ -604,10 +641,10 @@
       <section id="demo-en" class="demo-band" aria-labelledby="demo-title-en">
         <div class="section-inner demo-layout">
           <div class="section-heading">
-            <h2 id="demo-title-en">Controlled demo, clear boundaries</h2>
+            <h2 id="demo-title-en">Controlled Demo, Clear Boundaries</h2>
             <p>The next deployment target is a protected public URL backed by a VM running Ollama/Gemma4 and the Streamlit demo with ephemeral diary behavior.</p>
           </div>
-          <div class="notice"><h3>Responsible-use note</h3><p>EmpathyAI offers communication support only. It does not provide clinical, legal, HR, or specialized educational advice.</p></div>
+          <div class="notice"><h3>Responsible-Use Note</h3><p>EmpathyAI offers communication support only. It does not provide clinical, legal, HR, or specialized educational advice.</p></div>
         </div>
       </section>
     </article>
@@ -615,7 +652,7 @@
     <article class="language-layer" data-language="pt">
       <section class="hero" aria-labelledby="hero-title-pt">
         <div class="hero-inner">
-          <p class="eyebrow">Mediação de comunicação assistida por IA</p>
+          <p class="eyebrow">Mediação De Comunicação Assistida Por IA</p>
           <h1 id="hero-title-pt">EmpathyAI</h1>
           <p class="hero-copy">Transforme atritos de comunicação em pontes de entendimento mais seguras e claras, com apoio de IA local-first e controles explícitos de privacidade.</p>
           <div class="hero-actions">
@@ -629,14 +666,14 @@
       <section aria-labelledby="flow-title-pt">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="flow-title-pt">Como o fluxo de mediação funciona</h2>
+            <h2 id="flow-title-pt">Como O Fluxo De Mediação Funciona</h2>
             <p>O EmpathyAI mantém a pessoa no controle enquanto ajuda a reformular mal-entendidos em comunicação acionável.</p>
           </div>
           <div class="steps">
-            <div class="step"><span class="step-number">1</span><h3>Descreva a troca</h3><p>Compartilhe a interação sem precisar decidir quem está certo ou errado.</p></div>
-            <div class="step"><span class="step-number">2</span><h3>Mapeie o contexto</h3><p>Adicione notas opcionais de alteridade sobre perfis de comunicação e situação.</p></div>
-            <div class="step"><span class="step-number">3</span><h3>Revise a ponte</h3><p>Receba uma sugestão breve, não diagnóstica, pronta para copiar e adaptar.</p></div>
-            <div class="step"><span class="step-number">4</span><h3>Aprenda com o tempo</h3><p>Salve registros anonimizados e consentidos no diário de aprendizado mútuo.</p></div>
+            <div class="step"><span class="step-number">1</span><h3>Descreva A Troca</h3><p>Compartilhe a interação sem precisar decidir quem está certo ou errado.</p></div>
+            <div class="step"><span class="step-number">2</span><h3>Mapeie O Contexto</h3><p>Adicione notas opcionais de alteridade sobre perfis de comunicação e situação.</p></div>
+            <div class="step"><span class="step-number">3</span><h3>Revise A Ponte</h3><p>Receba uma sugestão breve, não diagnóstica, pronta para copiar e adaptar.</p></div>
+            <div class="step"><span class="step-number">4</span><h3>Aprenda Com O Tempo</h3><p>Salve registros anonimizados e consentidos no diário de aprendizado mútuo.</p></div>
           </div>
         </div>
       </section>
@@ -644,39 +681,47 @@
       <section aria-labelledby="capabilities-title-pt">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="capabilities-title-pt">Apoio para comunicação mais segura</h2>
+            <h2 id="capabilities-title-pt">Apoio Para Comunicação Mais Segura</h2>
             <p>O produto foca em clareza, perspectiva e limites de privacidade, não em diagnóstico ou culpa.</p>
           </div>
           <div class="capability-grid">
-            <div class="capability"><h3>Mapa de Alteridade</h3><p>Registre contexto dos dois lados antes da análise.</p></div>
-            <div class="capability"><h3>Ponte sugerida</h3><p>Gere uma frase prática para reparar a troca.</p></div>
-            <div class="capability"><h3>Controles local-first</h3><p>Mantenha processamento e armazenamento alinhados aos limites de privacidade da demo.</p></div>
-            <div class="capability"><h3>Diário de aprendizado mútuo</h3><p>Revise registros anonimizados e consentidos com perguntas de reflexão.</p></div>
+            <div class="capability"><h3>Mapa De Alteridade</h3><p>Registre contexto dos dois lados antes da análise.</p></div>
+            <div class="capability"><h3>Ponte Sugerida</h3><p>Gere uma frase prática para reparar a troca.</p></div>
+            <div class="capability"><h3>Controles Local-First</h3><p>Mantenha processamento e armazenamento alinhados aos limites de privacidade da demo.</p></div>
+            <div class="capability"><h3>Diário De Aprendizado Mútuo</h3><p>Revise registros anonimizados e consentidos com perguntas de reflexão.</p></div>
           </div>
         </div>
       </section>
 
-      <section id="interface-pt" aria-labelledby="interface-title-pt">
+      <section id="interface-pt" class="interface-section" aria-labelledby="interface-title-pt">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="interface-title-pt">Prévia da interface</h2>
+            <h2 id="interface-title-pt">Prévia Da Interface</h2>
             <p>Veja o fluxo da demo em PT-BR, do formulário guiado ao resultado localizado e ao diário.</p>
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-1.png" alt="Interface do EmpathyAI em português mostrando formulário principal e campos do mapa de alteridade." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-1.png" alt="Interface do EmpathyAI em português mostrando formulário principal e campos do mapa de alteridade." loading="lazy">
+              </a>
               <figcaption>Fluxo principal com campos de contexto visíveis.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-2.png" alt="Interface do EmpathyAI em português mostrando feedback, controles de privacidade e ação de análise." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-2.png" alt="Interface do EmpathyAI em português mostrando feedback, controles de privacidade e ação de análise." loading="lazy">
+              </a>
               <figcaption>Consentimento, feedback da resposta e ação de análise.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-3.png" alt="Tela de resultado do EmpathyAI em português mostrando ponte sugerida e seções explicativas." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-3.png" alt="Tela de resultado do EmpathyAI em português mostrando ponte sugerida e seções explicativas." loading="lazy">
+              </a>
               <figcaption>Ponte sugerida destacada como resultado principal.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-4.png" alt="Diário do EmpathyAI em português mostrando registros locais anonimizados e consentidos." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-4.png" alt="Diário do EmpathyAI em português mostrando registros locais anonimizados e consentidos." loading="lazy">
+              </a>
               <figcaption>Diário de aprendizado mútuo com registros locais consentidos.</figcaption>
             </figure>
           </div>
@@ -686,19 +731,27 @@
       <section id="videos-pt" aria-labelledby="videos-title-pt">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="videos-title-pt">Assista ao pitch e à apresentação do projeto</h2>
+            <h2 id="videos-title-pt">Assista Ao Pitch E À Apresentação Do Projeto</h2>
             <p>Dois vídeos curtos apresentam a proposta de valor e a implementação atual.</p>
           </div>
           <div class="media-grid">
             <div class="video-panel">
               <h3>Pitch</h3>
               <p>Uma visão objetiva da oportunidade e da proposta de valor.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/sA26L7lsu2M" title="Pitch do EmpathyAI em português" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="Pitch do EmpathyAI em português">
+                  <source src="../videos/EmpathyAI_pitch_PT-BR.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
             <div class="video-panel">
               <h3>Projeto</h3>
               <p>Uma demonstração do conceito do produto e da implementação.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/OXi9H7ybFT4" title="Projeto EmpathyAI em português" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="Projeto EmpathyAI em português">
+                  <source src="../videos/EmpathyAI_project_PT-BR.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
           </div>
         </div>
@@ -707,10 +760,10 @@
       <section id="demo-pt" class="demo-band" aria-labelledby="demo-title-pt">
         <div class="section-inner demo-layout">
           <div class="section-heading">
-            <h2 id="demo-title-pt">Demo controlada, limites claros</h2>
+            <h2 id="demo-title-pt">Demo Controlada, Limites Claros</h2>
             <p>O próximo alvo de implantação é uma URL pública protegida em VM com Ollama/Gemma4 e Streamlit, usando diário efêmero.</p>
           </div>
-          <div class="notice"><h3>Nota de uso responsável</h3><p>O EmpathyAI oferece apenas apoio de comunicação. Ele não fornece aconselhamento clínico, jurídico, de RH ou educacional especializado.</p></div>
+          <div class="notice"><h3>Nota De Uso Responsável</h3><p>O EmpathyAI oferece apenas apoio de comunicação. Ele não fornece aconselhamento clínico, jurídico, de RH ou educacional especializado.</p></div>
         </div>
       </section>
     </article>
@@ -718,7 +771,7 @@
     <article class="language-layer" data-language="es">
       <section class="hero" aria-labelledby="hero-title-es">
         <div class="hero-inner">
-          <p class="eyebrow">Mediación de comunicación asistida por IA</p>
+          <p class="eyebrow">Mediación De Comunicación Asistida Por IA</p>
           <h1 id="hero-title-es">EmpathyAI</h1>
           <p class="hero-copy">Convierte fricciones de comunicación en puentes de entendimiento más seguros y claros, con apoyo de IA local-first y controles explícitos de privacidad.</p>
           <div class="hero-actions">
@@ -732,14 +785,14 @@
       <section aria-labelledby="flow-title-es">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="flow-title-es">Cómo funciona el flujo de mediación</h2>
+            <h2 id="flow-title-es">Cómo Funciona El Flujo De Mediación</h2>
             <p>EmpathyAI mantiene a la persona en control mientras ayuda a reformular malentendidos en comunicación accionable.</p>
           </div>
           <div class="steps">
-            <div class="step"><span class="step-number">1</span><h3>Describe el intercambio</h3><p>Comparte la interacción sin tener que decidir quién tiene razón.</p></div>
-            <div class="step"><span class="step-number">2</span><h3>Mapea el contexto</h3><p>Agrega notas opcionales de alteridad sobre perfiles de comunicación y situación.</p></div>
-            <div class="step"><span class="step-number">3</span><h3>Revisa el puente</h3><p>Recibe una sugerencia breve, no diagnóstica, lista para copiar y adaptar.</p></div>
-            <div class="step"><span class="step-number">4</span><h3>Aprende con el tiempo</h3><p>Guarda registros anonimizados y consentidos en el diario de aprendizaje mutuo.</p></div>
+            <div class="step"><span class="step-number">1</span><h3>Describe El Intercambio</h3><p>Comparte la interacción sin tener que decidir quién tiene razón.</p></div>
+            <div class="step"><span class="step-number">2</span><h3>Mapea El Contexto</h3><p>Agrega notas opcionales de alteridad sobre perfiles de comunicación y situación.</p></div>
+            <div class="step"><span class="step-number">3</span><h3>Revisa El Puente</h3><p>Recibe una sugerencia breve, no diagnóstica, lista para copiar y adaptar.</p></div>
+            <div class="step"><span class="step-number">4</span><h3>Aprende Con El Tiempo</h3><p>Guarda registros anonimizados y consentidos en el diario de aprendizaje mutuo.</p></div>
           </div>
         </div>
       </section>
@@ -747,39 +800,47 @@
       <section aria-labelledby="capabilities-title-es">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="capabilities-title-es">Apoyo para una comunicación más segura</h2>
+            <h2 id="capabilities-title-es">Apoyo Para Una Comunicación Más Segura</h2>
             <p>El producto se enfoca en claridad, perspectiva y límites de privacidad, no en diagnóstico ni culpa.</p>
           </div>
           <div class="capability-grid">
-            <div class="capability"><h3>Mapa de Alteridad</h3><p>Registra contexto de ambos lados antes del análisis.</p></div>
-            <div class="capability"><h3>Puente sugerido</h3><p>Genera una frase práctica para reparar el intercambio.</p></div>
-            <div class="capability"><h3>Controles local-first</h3><p>Mantén procesamiento y almacenamiento alineados con los límites de privacidad de la demo.</p></div>
-            <div class="capability"><h3>Diario de aprendizaje mutuo</h3><p>Revisa registros anonimizados y consentidos con preguntas de reflexión.</p></div>
+            <div class="capability"><h3>Mapa De Alteridad</h3><p>Registra contexto de ambos lados antes del análisis.</p></div>
+            <div class="capability"><h3>Puente Sugerido</h3><p>Genera una frase práctica para reparar el intercambio.</p></div>
+            <div class="capability"><h3>Controles Local-First</h3><p>Mantén procesamiento y almacenamiento alineados con los límites de privacidad de la demo.</p></div>
+            <div class="capability"><h3>Diario De Aprendizaje Mutuo</h3><p>Revisa registros anonimizados y consentidos con preguntas de reflexión.</p></div>
           </div>
         </div>
       </section>
 
-      <section id="interface-es" aria-labelledby="interface-title-es">
+      <section id="interface-es" class="interface-section" aria-labelledby="interface-title-es">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="interface-title-es">Vista previa de la interfaz</h2>
+            <h2 id="interface-title-es">Vista Previa De La Interfaz</h2>
             <p>Mira el flujo de la demo en español, desde el formulario guiado hasta el resultado localizado y el diario.</p>
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-1.png" alt="Interfaz de EmpathyAI en español mostrando el formulario principal y campos del mapa de alteridad." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-1.png" alt="Interfaz de EmpathyAI en español mostrando el formulario principal y campos del mapa de alteridad." loading="lazy">
+              </a>
               <figcaption>Flujo principal con campos de contexto visibles.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-2.png" alt="Interfaz de EmpathyAI en español mostrando feedback, controles de privacidad y acción de análisis." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-2.png" alt="Interfaz de EmpathyAI en español mostrando feedback, controles de privacidad y acción de análisis." loading="lazy">
+              </a>
               <figcaption>Consentimiento, feedback de respuesta y acción de análisis.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-3.png" alt="Pantalla de resultado de EmpathyAI en español mostrando puente sugerido y secciones explicativas." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-3.png" alt="Pantalla de resultado de EmpathyAI en español mostrando puente sugerido y secciones explicativas." loading="lazy">
+              </a>
               <figcaption>Puente sugerido destacado como resultado principal.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-4.png" alt="Diario de EmpathyAI en español mostrando registros locales anonimizados y consentidos." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-4.png" alt="Diario de EmpathyAI en español mostrando registros locales anonimizados y consentidos." loading="lazy">
+              </a>
               <figcaption>Diario de aprendizaje mutuo con registros locales consentidos.</figcaption>
             </figure>
           </div>
@@ -789,19 +850,27 @@
       <section id="videos-es" aria-labelledby="videos-title-es">
         <div class="section-inner">
           <div class="section-heading">
-            <h2 id="videos-title-es">Mira el pitch y la presentación del proyecto</h2>
+            <h2 id="videos-title-es">Mira El Pitch Y La Presentación Del Proyecto</h2>
             <p>Dos videos breves presentan la propuesta de valor y la implementación actual.</p>
           </div>
           <div class="media-grid">
             <div class="video-panel">
               <h3>Pitch</h3>
               <p>Una visión concisa de la oportunidad y la propuesta de valor.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/QglZuuNpIpM" title="Pitch de EmpathyAI en español" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="Pitch de EmpathyAI en español">
+                  <source src="../videos/EmpathyAI_pitch_ES.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
             <div class="video-panel">
               <h3>Proyecto</h3>
               <p>Una demostración del concepto del producto y la implementación.</p>
-              <div class="video-frame"><iframe src="https://www.youtube.com/embed/ZjnyZeH075k" title="Proyecto EmpathyAI en español" allowfullscreen loading="lazy"></iframe></div>
+              <div class="video-frame">
+                <video controls preload="metadata" aria-label="Proyecto EmpathyAI en español">
+                  <source src="../videos/EmpathyAI_project_ES.mp4" type="video/mp4">
+                </video>
+              </div>
             </div>
           </div>
         </div>
@@ -810,10 +879,10 @@
       <section id="demo-es" class="demo-band" aria-labelledby="demo-title-es">
         <div class="section-inner demo-layout">
           <div class="section-heading">
-            <h2 id="demo-title-es">Demo controlada, límites claros</h2>
+            <h2 id="demo-title-es">Demo Controlada, Límites Claros</h2>
             <p>El próximo objetivo de despliegue es una URL pública protegida en VM con Ollama/Gemma4 y Streamlit, usando diario efímero.</p>
           </div>
-          <div class="notice"><h3>Nota de uso responsable</h3><p>EmpathyAI ofrece solo apoyo de comunicación. No proporciona asesoría clínica, legal, de RR. HH. ni educativa especializada.</p></div>
+          <div class="notice"><h3>Nota De Uso Responsable</h3><p>EmpathyAI ofrece solo apoyo de comunicación. No proporciona asesoría clínica, legal, de RR. HH. ni educativa especializada.</p></div>
         </div>
       </section>
     </article>

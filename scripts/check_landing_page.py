@@ -8,13 +8,13 @@ ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
 LAUNCHER_ENDPOINT = (
     "https://empathyai-demo-launcher-nepwxbwava-uc.a.run.app/start-demo"
 )
-REQUIRED_VIDEO_IDS = {
-    "sA26L7lsu2M",
-    "urQLq7XPmMo",
-    "QglZuuNpIpM",
-    "OXi9H7ybFT4",
-    "msrbxW9grXk",
-    "ZjnyZeH075k",
+REQUIRED_VIDEO_FILES = {
+    "EmpathyAI_pitch_EN.mp4",
+    "EmpathyAI_pitch_ES.mp4",
+    "EmpathyAI_pitch_PT-BR.mp4",
+    "EmpathyAI_project_EN.mp4",
+    "EmpathyAI_project_ES.mp4",
+    "EmpathyAI_project_PT-BR.mp4",
 }
 REQUIRED_LANGUAGES = {"en", "pt", "es"}
 REQUIRED_SCREENSHOTS = {
@@ -31,6 +31,20 @@ REQUIRED_SCREENSHOTS = {
     "screenshot-ES-3.png",
     "screenshot-ES-4.png",
 }
+REQUIRED_TITLE_CASE_TEXT = {
+    "How The Mediation Flow Works",
+    "Built For Safer Communication Support",
+    "Interface Preview",
+    "Controlled Demo, Clear Boundaries",
+    "Como O Fluxo De Mediação Funciona",
+    "Apoio Para Comunicação Mais Segura",
+    "Prévia Da Interface",
+    "Demo Controlada, Limites Claros",
+    "Cómo Funciona El Flujo De Mediación",
+    "Apoyo Para Una Comunicación Más Segura",
+    "Vista Previa De La Interfaz",
+    "Demo Controlada, Límites Claros",
+}
 
 
 class LandingParser(HTMLParser):
@@ -41,6 +55,7 @@ class LandingParser(HTMLParser):
         self.iframes = []
         self.images = []
         self.links = []
+        self.video_sources = []
         self.launch_buttons = 0
 
     def handle_starttag(self, tag, attrs):
@@ -51,6 +66,8 @@ class LandingParser(HTMLParser):
             self.language_buttons.add(attributes["data-language-button"])
         if tag == "iframe":
             self.iframes.append(attributes.get("src", ""))
+        if tag == "source":
+            self.video_sources.append(attributes.get("src", ""))
         if tag == "img":
             self.images.append(attributes.get("src", ""))
         if tag == "a":
@@ -70,15 +87,31 @@ def main() -> None:
         raise SystemExit(f"landing: language buttons mismatch: {parser.language_buttons}")
 
     missing_videos = [
-        video_id
-        for video_id in REQUIRED_VIDEO_IDS
-        if f"https://www.youtube.com/embed/{video_id}" not in parser.iframes
+        video_file
+        for video_file in REQUIRED_VIDEO_FILES
+        if f"../videos/{video_file}" not in parser.video_sources
     ]
     if missing_videos:
-        raise SystemExit(f"landing: missing video embeds: {missing_videos}")
+        raise SystemExit(f"landing: missing local video sources: {missing_videos}")
+    if parser.iframes:
+        raise SystemExit("landing: videos should use local MP4 files, not iframe embeds")
+    for video_token in ("<video controls preload=\"metadata\"", "type=\"video/mp4\""):
+        if video_token not in source:
+            raise SystemExit(f"landing: missing local video token: {video_token}")
 
-    if "../images/EmpathyAI_logo.png" not in source:
-        raise SystemExit("landing: missing EmpathyAI logo asset reference")
+    if "../images/EmpathyAI_logo_mark.png" not in source:
+        raise SystemExit("landing: missing transparent header logo mark reference")
+    if "../images/EmpathyAI_logo_mark.png" not in parser.images:
+        raise SystemExit("landing: header logo should use the transparent logo mark")
+    if 'url("../images/EmpathyAI_logo_mark.png")' not in source:
+        raise SystemExit("landing: hero background should use the transparent logo mark")
+    if "object-position: center;" not in source:
+        raise SystemExit("landing: header logo alignment styling is missing")
+    missing_title_case = [
+        text for text in sorted(REQUIRED_TITLE_CASE_TEXT) if text not in source
+    ]
+    if missing_title_case:
+        raise SystemExit(f"landing: missing title-case headings: {missing_title_case}")
 
     missing_screenshots = [
         screenshot
@@ -87,6 +120,24 @@ def main() -> None:
     ]
     if missing_screenshots:
         raise SystemExit(f"landing: missing screenshot references: {missing_screenshots}")
+    missing_screenshot_links = [
+        screenshot
+        for screenshot in REQUIRED_SCREENSHOTS
+        if f"../images/{screenshot}" not in parser.links
+    ]
+    if missing_screenshot_links:
+        raise SystemExit(
+            f"landing: screenshots must link to full-size images: {missing_screenshot_links}"
+        )
+    for screenshot_token in (
+        "interface-section .section-inner",
+        "width: min(1360px, calc(100% - 32px));",
+        "cursor: zoom-in;",
+        "target=\"_blank\"",
+        "rel=\"noopener\"",
+    ):
+        if screenshot_token not in source:
+            raise SystemExit(f"landing: missing screenshot UX token: {screenshot_token}")
 
     if "Launch Controlled Demo" not in source:
         raise SystemExit("landing: missing English CTA")
