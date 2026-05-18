@@ -293,6 +293,10 @@
       margin: 0 auto;
     }
 
+    .interface-section .section-inner {
+      width: min(1360px, calc(100% - 32px));
+    }
+
     .section-heading {
       max-width: 780px;
       margin-bottom: 28px;
@@ -398,7 +402,7 @@
     .screenshot-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
+      gap: 22px;
     }
 
     .screenshot-card {
@@ -406,7 +410,21 @@
       border-radius: 8px;
       overflow: hidden;
       background: var(--surface);
-      box-shadow: 0 14px 34px rgba(24, 51, 59, 0.06);
+      box-shadow: 0 18px 42px rgba(24, 51, 59, 0.08);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .screenshot-card:hover,
+    .screenshot-card:focus-within {
+      border-color: rgba(13, 127, 136, 0.42);
+      box-shadow: 0 24px 58px rgba(24, 51, 59, 0.13);
+      transform: translateY(-2px);
+    }
+
+    .screenshot-link {
+      display: block;
+      background: #f8fcfc;
+      cursor: zoom-in;
     }
 
     .screenshot-card img {
@@ -555,7 +573,7 @@
         </div>
       </section>
 
-      <section id="interface-en" aria-labelledby="interface-title-en">
+      <section id="interface-en" class="interface-section" aria-labelledby="interface-title-en">
         <div class="section-inner">
           <div class="section-heading">
             <h2 id="interface-title-en">Interface Preview</h2>
@@ -563,19 +581,27 @@
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-1.png" alt="English EmpathyAI interface showing the main form and alterity map fields." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-1.png" alt="English EmpathyAI interface showing the main form and alterity map fields." loading="lazy">
+              </a>
               <figcaption>Main analysis flow with visible context fields.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-2.png" alt="English EmpathyAI interface showing feedback, privacy controls, and the analysis action." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-2.png" alt="English EmpathyAI interface showing feedback, privacy controls, and the analysis action." loading="lazy">
+              </a>
               <figcaption>Consent, response feedback, and analysis action.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-3.png" alt="English EmpathyAI result screen showing suggested bridge and explanatory sections." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-3.png" alt="English EmpathyAI result screen showing suggested bridge and explanatory sections." loading="lazy">
+              </a>
               <figcaption>Suggested bridge highlighted as the primary result.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-EN-4.png" alt="English EmpathyAI diary showing saved anonymized learning records." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-EN-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-EN-4.png" alt="English EmpathyAI diary showing saved anonymized learning records." loading="lazy">
+              </a>
               <figcaption>Mutual learning diary with consented local records.</figcaption>
             </figure>
           </div>
@@ -658,7 +684,7 @@
         </div>
       </section>
 
-      <section id="interface-pt" aria-labelledby="interface-title-pt">
+      <section id="interface-pt" class="interface-section" aria-labelledby="interface-title-pt">
         <div class="section-inner">
           <div class="section-heading">
             <h2 id="interface-title-pt">Prévia Da Interface</h2>
@@ -666,19 +692,27 @@
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-1.png" alt="Interface do EmpathyAI em português mostrando formulário principal e campos do mapa de alteridade." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-1.png" alt="Interface do EmpathyAI em português mostrando formulário principal e campos do mapa de alteridade." loading="lazy">
+              </a>
               <figcaption>Fluxo principal com campos de contexto visíveis.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-2.png" alt="Interface do EmpathyAI em português mostrando feedback, controles de privacidade e ação de análise." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-2.png" alt="Interface do EmpathyAI em português mostrando feedback, controles de privacidade e ação de análise." loading="lazy">
+              </a>
               <figcaption>Consentimento, feedback da resposta e ação de análise.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-3.png" alt="Tela de resultado do EmpathyAI em português mostrando ponte sugerida e seções explicativas." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-3.png" alt="Tela de resultado do EmpathyAI em português mostrando ponte sugerida e seções explicativas." loading="lazy">
+              </a>
               <figcaption>Ponte sugerida destacada como resultado principal.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-PT-BR-4.png" alt="Diário do EmpathyAI em português mostrando registros locais anonimizados e consentidos." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-PT-BR-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-PT-BR-4.png" alt="Diário do EmpathyAI em português mostrando registros locais anonimizados e consentidos." loading="lazy">
+              </a>
               <figcaption>Diário de aprendizado mútuo com registros locais consentidos.</figcaption>
             </figure>
           </div>
@@ -761,7 +795,7 @@
         </div>
       </section>
 
-      <section id="interface-es" aria-labelledby="interface-title-es">
+      <section id="interface-es" class="interface-section" aria-labelledby="interface-title-es">
         <div class="section-inner">
           <div class="section-heading">
             <h2 id="interface-title-es">Vista Previa De La Interfaz</h2>
@@ -769,19 +803,27 @@
           </div>
           <div class="screenshot-grid">
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-1.png" alt="Interfaz de EmpathyAI en español mostrando el formulario principal y campos del mapa de alteridad." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-1.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-1.png" alt="Interfaz de EmpathyAI en español mostrando el formulario principal y campos del mapa de alteridad." loading="lazy">
+              </a>
               <figcaption>Flujo principal con campos de contexto visibles.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-2.png" alt="Interfaz de EmpathyAI en español mostrando feedback, controles de privacidad y acción de análisis." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-2.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-2.png" alt="Interfaz de EmpathyAI en español mostrando feedback, controles de privacidad y acción de análisis." loading="lazy">
+              </a>
               <figcaption>Consentimiento, feedback de respuesta y acción de análisis.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-3.png" alt="Pantalla de resultado de EmpathyAI en español mostrando puente sugerido y secciones explicativas." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-3.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-3.png" alt="Pantalla de resultado de EmpathyAI en español mostrando puente sugerido y secciones explicativas." loading="lazy">
+              </a>
               <figcaption>Puente sugerido destacado como resultado principal.</figcaption>
             </figure>
             <figure class="screenshot-card">
-              <img src="../images/screenshot-ES-4.png" alt="Diario de EmpathyAI en español mostrando registros locales anonimizados y consentidos." loading="lazy">
+              <a class="screenshot-link" href="../images/screenshot-ES-4.png" target="_blank" rel="noopener">
+                <img src="../images/screenshot-ES-4.png" alt="Diario de EmpathyAI en español mostrando registros locales anonimizados y consentidos." loading="lazy">
+              </a>
               <figcaption>Diario de aprendizaje mutuo con registros locales consentidos.</figcaption>
             </figure>
           </div>

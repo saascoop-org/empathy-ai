@@ -112,6 +112,24 @@ def main() -> None:
     ]
     if missing_screenshots:
         raise SystemExit(f"landing: missing screenshot references: {missing_screenshots}")
+    missing_screenshot_links = [
+        screenshot
+        for screenshot in REQUIRED_SCREENSHOTS
+        if f"../images/{screenshot}" not in parser.links
+    ]
+    if missing_screenshot_links:
+        raise SystemExit(
+            f"landing: screenshots must link to full-size images: {missing_screenshot_links}"
+        )
+    for screenshot_token in (
+        "interface-section .section-inner",
+        "width: min(1360px, calc(100% - 32px));",
+        "cursor: zoom-in;",
+        "target=\"_blank\"",
+        "rel=\"noopener\"",
+    ):
+        if screenshot_token not in source:
+            raise SystemExit(f"landing: missing screenshot UX token: {screenshot_token}")
 
     if "Launch Controlled Demo" not in source:
         raise SystemExit("landing: missing English CTA")
