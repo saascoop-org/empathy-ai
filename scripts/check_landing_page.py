@@ -8,13 +8,13 @@ ROOT_SESSION_EXPIRED_PATH = Path("session-expired.html")
 LAUNCHER_ENDPOINT = (
     "https://empathyai-demo-launcher-nepwxbwava-uc.a.run.app/start-demo"
 )
-REQUIRED_VIDEO_IDS = {
-    "sA26L7lsu2M",
-    "urQLq7XPmMo",
-    "QglZuuNpIpM",
-    "OXi9H7ybFT4",
-    "msrbxW9grXk",
-    "ZjnyZeH075k",
+REQUIRED_VIDEO_FILES = {
+    "EmpathyAI_pitch_EN.mp4",
+    "EmpathyAI_pitch_ES.mp4",
+    "EmpathyAI_pitch_PT-BR.mp4",
+    "EmpathyAI_project_EN.mp4",
+    "EmpathyAI_project_ES.mp4",
+    "EmpathyAI_project_PT-BR.mp4",
 }
 REQUIRED_LANGUAGES = {"en", "pt", "es"}
 REQUIRED_SCREENSHOTS = {
@@ -55,6 +55,7 @@ class LandingParser(HTMLParser):
         self.iframes = []
         self.images = []
         self.links = []
+        self.video_sources = []
         self.launch_buttons = 0
 
     def handle_starttag(self, tag, attrs):
@@ -65,6 +66,8 @@ class LandingParser(HTMLParser):
             self.language_buttons.add(attributes["data-language-button"])
         if tag == "iframe":
             self.iframes.append(attributes.get("src", ""))
+        if tag == "source":
+            self.video_sources.append(attributes.get("src", ""))
         if tag == "img":
             self.images.append(attributes.get("src", ""))
         if tag == "a":
@@ -84,12 +87,17 @@ def main() -> None:
         raise SystemExit(f"landing: language buttons mismatch: {parser.language_buttons}")
 
     missing_videos = [
-        video_id
-        for video_id in REQUIRED_VIDEO_IDS
-        if f"https://www.youtube.com/embed/{video_id}" not in parser.iframes
+        video_file
+        for video_file in REQUIRED_VIDEO_FILES
+        if f"../videos/{video_file}" not in parser.video_sources
     ]
     if missing_videos:
-        raise SystemExit(f"landing: missing video embeds: {missing_videos}")
+        raise SystemExit(f"landing: missing local video sources: {missing_videos}")
+    if parser.iframes:
+        raise SystemExit("landing: videos should use local MP4 files, not iframe embeds")
+    for video_token in ("<video controls preload=\"metadata\"", "type=\"video/mp4\""):
+        if video_token not in source:
+            raise SystemExit(f"landing: missing local video token: {video_token}")
 
     if "../images/EmpathyAI_logo_mark.png" not in source:
         raise SystemExit("landing: missing transparent header logo mark reference")
