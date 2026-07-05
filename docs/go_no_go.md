@@ -30,9 +30,9 @@
 1. Stop the Streamlit process.
 2. Delete local demo data if needed:
 
-```powershell
-Remove-Item data/interactions.sqlite3
-```
+    ```powershell
+    Remove-Item data/interactions.sqlite3
+    ```
 
 3. Restore `.env` from `.env.example` if configuration was changed.
 4. Restart Streamlit only after tests pass again.

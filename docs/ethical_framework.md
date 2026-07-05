@@ -17,6 +17,7 @@ Active policy: `../specs/safety-policy-v1.md`.
 The system never determines who is right or wrong.
 
 The system provides:
+
 - possible interpretations
 - empathy bridges
 - communication alternatives
