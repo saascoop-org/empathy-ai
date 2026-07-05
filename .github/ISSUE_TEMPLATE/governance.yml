@@ -1,0 +1,16 @@
+name: Governance proposal
+description: Propose a governance, process or policy change.
+title: "[Governance]: "
+labels: ["kind:governance", "status:triage", "needs-discussion"]
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and cautions
+      description: Include legal, financial, community or conflict-of-interest risks.
