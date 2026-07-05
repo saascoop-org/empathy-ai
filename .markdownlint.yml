@@ -1,3 +1,21 @@
+default: true
+
+# -----------------------------------------------------------------------------
+# Markdown rules adopted by SaaSCoop
+# -----------------------------------------------------------------------------
+
+# Long lines are acceptable in documentation and code examples.
 MD013: false
+
+# Inline HTML is allowed (badges, details, tables, etc.).
 MD033: false
+
+# First heading is not mandatory for generated documents.
 MD041: false
+
+# Allow bare URLs for references (GitHub, Kaggle, DOI, RFCs...).
+MD034: false
+
+# Allow repeated headings when they belong to different sections.
+MD024:
+  siblings_only: true
