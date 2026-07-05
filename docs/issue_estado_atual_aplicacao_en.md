@@ -46,4 +46,3 @@ The application is in a local demonstrative state with the deployment checklist 
 - Push the remote branch once the scope is approved.
 - Optional: open a documentation/deployment-state PR.
 - For a demo with full Gemma 4, use a machine with enough memory for `gemma4:e2b`.
-

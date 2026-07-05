@@ -5,6 +5,7 @@ Canonical privacy and consent behavior spec: `../specs/features/privacy-consent-
 ## Local-first execution
 
 The system prioritizes:
+
 - local Gemma execution
 - local SQLite storage
 - anonymized interaction logs

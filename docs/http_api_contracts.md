@@ -143,4 +143,3 @@ Extrai rascunhos editaveis para preencher o Mapa de Alteridade.
   "requires_manual_review": true
 }
 ```
-
